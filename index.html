@@ -307,6 +307,25 @@
   .word-chip.placed { background: var(--card-bg); color: var(--text); border: 2px solid var(--border); }
   .chip-bank { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-bottom: 14px; }
  
+  /* ===== Writing ===== */
+  .writing-input {
+    width: 100%; max-width: 280px; font-size: 26px; text-align:center; font-weight:700;
+    padding: 12px 16px; border-radius: 14px; border: 3px solid var(--primary);
+    background: var(--card-bg); color: var(--text); margin: 14px 0; font-family:'Fredoka',sans-serif;
+    text-transform: lowercase;
+  }
+  .writing-input:focus { outline:none; border-color: var(--primary-dark); }
+ 
+  /* ===== Speaking ===== */
+  .mic-btn {
+    width: 84px; height: 84px; border-radius: 50%; border:none; font-size: 36px; cursor:pointer;
+    background: linear-gradient(160deg, var(--honey-light), var(--coral)); color:white; margin: 12px 0;
+    box-shadow: 0 5px 0 var(--coral-dark);
+  }
+  .mic-btn:active { transform: translateY(4px); box-shadow:none; }
+  .mic-btn.listening { background: linear-gradient(160deg, #ff8a8a, var(--red)); animation: pulse-mic 1s infinite; }
+  @keyframes pulse-mic { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+ 
   /* ===== Result screen ===== */
   .result-screen { text-align:center; padding: 10px; }
   .result-screen .big-emoji { font-size: 60px; }
@@ -485,6 +504,34 @@
         <button class="check-btn" id="sentence-check">✅ Kiểm tra</button>
         <div class="feedback" id="sentence-feedback"></div>
       </div>
+ 
+      <div id="block-writing" style="display:none;">
+        <div class="fill-item">
+          <div class="emoji-big" id="writing-emoji" style="cursor:pointer;" title="Chạm để nghe"></div>
+          <div class="instructions" style="margin-top:-8px; margin-bottom:10px;">👆 Chạm vào hình để nghe từ</div>
+          <div class="instructions">Nhìn hình, nghe từ, rồi gõ đúng từ tiếng Anh nhé!</div>
+          <input type="text" id="writing-input" class="writing-input" autocomplete="off" placeholder="Gõ từ vào đây...">
+          <div>
+            <button class="check-btn" id="writing-check">✅ Kiểm tra</button>
+          </div>
+          <div class="feedback" id="writing-feedback"></div>
+        </div>
+      </div>
+ 
+      <div id="block-speaking" style="display:none;">
+        <div class="fill-item">
+          <div class="emoji-big" id="speaking-emoji"></div>
+          <div class="word-en" id="speaking-word"></div>
+          <button class="speak-btn" id="speaking-listen">🔊 Nghe mẫu</button>
+          <div class="instructions" style="margin-top:14px;">Bấm micro rồi đọc to từ này nhé!</div>
+          <button class="mic-btn" id="speaking-mic">🎤</button>
+          <div class="feedback" id="speaking-feedback"></div>
+          <div id="speaking-unsupported" style="display:none;">
+            <p class="instructions">Trình duyệt này chưa hỗ trợ nhận diện giọng nói (hãy thử Chrome). Mời phụ huynh/giáo viên nghe bé đọc trực tiếp nhé!</p>
+            <button class="check-btn" id="speaking-fallback-ok">✅ Bé đã đọc xong</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
  
@@ -543,8 +590,9 @@
   const STEP_LABELS = [
     "1. Phonics & Sounds", "2. Vocabulary", "3. Remove Letter", "4. Fill Missing",
     "5. Odd One Out", "6. Reading Stories", "7. Sentence Builder", "8. Fill Sentence",
-    "9. Bài kiểm tra Unit"
+    "9. Writing (Viết)", "10. Speaking (Nói)", "11. Bài kiểm tra Unit"
   ];
+  const TOTAL_LEARN_STEPS = 10; // số bước học (không tính bài kiểm tra cuối)
  
   const UNITS = [
     {
@@ -904,8 +952,8 @@
  
   // ================= PROGRESS (persisted per-viewer) =================
   let progress = {};
-  try { const s = localStorage.getItem('unit_progress_v3'); if (s) progress = JSON.parse(s); } catch (e) {}
-  function saveProgress() { try { localStorage.setItem('unit_progress_v3', JSON.stringify(progress)); } catch (e) {} }
+  try { const s = localStorage.getItem('unit_progress_v4'); if (s) progress = JSON.parse(s); } catch (e) {}
+  function saveProgress() { try { localStorage.setItem('unit_progress_v4', JSON.stringify(progress)); } catch (e) {} }
   function getUP(unitId) {
     if (!progress[unitId]) progress[unitId] = { stepResults: [], passed: false, bestScore: 0 };
     return progress[unitId];
@@ -915,7 +963,7 @@
     return (result.correct / result.total) >= 0.8;
   }
   function allEightStepsPassed(up) {
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < TOTAL_LEARN_STEPS; i++) {
       const r = up.stepResults[i];
       if (!r || !stepPassed(r)) return false;
     }
@@ -923,7 +971,7 @@
   }
   function countPassedSteps(up) {
     let n = 0;
-    for (let i = 0; i < 8; i++) { if (stepPassed(up.stepResults[i])) n++; }
+    for (let i = 0; i < TOTAL_LEARN_STEPS; i++) { if (stepPassed(up.stepResults[i])) n++; }
     return n;
   }
   function isUnitUnlocked(unitId) {
@@ -933,11 +981,34 @@
   }
  
   // ================= UTIL =================
+  let cachedUSVoice = null;
+  function pickUSVoice() {
+    if (!('speechSynthesis' in window)) return null;
+    const voices = window.speechSynthesis.getVoices() || [];
+    if (!voices.length) return null;
+    // Ưu tiên các giọng US chất lượng cao thường có trên Chrome/Edge/Windows/Android
+    const preferredNames = ['Google US English', 'Microsoft Aria Online (Natural) - English (United States)', 'Microsoft Guy Online (Natural) - English (United States)', 'Samantha', 'Alex'];
+    for (const name of preferredNames) {
+      const v = voices.find(v => v.name === name);
+      if (v) return v;
+    }
+    // Sau đó ưu tiên bất kỳ giọng nào có lang chính xác en-US
+    const usVoice = voices.find(v => v.lang === 'en-US') || voices.find(v => v.lang && v.lang.toLowerCase().startsWith('en-us'));
+    if (usVoice) return usVoice;
+    // Cuối cùng chấp nhận giọng tiếng Anh bất kỳ còn hơn không có
+    return voices.find(v => v.lang && v.lang.toLowerCase().startsWith('en')) || null;
+  }
+  if ('speechSynthesis' in window) {
+    cachedUSVoice = pickUSVoice();
+    window.speechSynthesis.onvoiceschanged = () => { cachedUSVoice = pickUSVoice(); };
+  }
   function speak(text) {
     try {
       if (!('speechSynthesis' in window)) return;
       const u = new SpeechSynthesisUtterance(text);
       u.lang = 'en-US'; u.rate = 0.85;
+      if (!cachedUSVoice) cachedUSVoice = pickUSVoice();
+      if (cachedUSVoice) u.voice = cachedUSVoice;
       window.speechSynthesis.cancel(); window.speechSynthesis.speak(u);
     } catch (e) {}
   }
@@ -981,7 +1052,7 @@
       } else if (p.passed) {
         subHtml = '<span class="badge-pass">✅ Đã đạt ' + p.bestScore + '%</span>';
       } else if (countPassedSteps(p) > 0) {
-        subHtml = '<span class="badge-progress">📖 ' + countPassedSteps(p) + '/8 bước đạt</span>';
+        subHtml = '<span class="badge-progress">📖 ' + countPassedSteps(p) + '/' + TOTAL_LEARN_STEPS + ' bước đạt</span>';
       } else {
         subHtml = '<div class="u-sub">Chưa bắt đầu</div>';
       }
@@ -998,19 +1069,19 @@
   function renderUnitDetail() {
     document.getElementById('header-emoji').textContent = currentUnit.emoji;
     document.getElementById('header-title').textContent = currentUnit.title;
-    document.getElementById('header-sub').textContent = 'Làm 8 bước theo thứ tự tuỳ ý, đạt hết mới mở bài kiểm tra';
+    document.getElementById('header-sub').textContent = 'Làm ' + TOTAL_LEARN_STEPS + ' bước theo thứ tự tuỳ ý, đạt hết mới mở bài kiểm tra';
     const up = getUP(currentUnit.id);
     const eightDone = allEightStepsPassed(up);
     const list = document.getElementById('step-list');
     list.innerHTML = '';
     STEP_LABELS.forEach((label, i) => {
       let icon, extraLabel = '', locked = false;
-      if (i === 8) {
-        // Bước 9: bài kiểm tra tổng hợp — chỉ mở khi đủ 8 bước đã đạt ≥80%
+      if (i === 10) {
+        // Bước 11: bài kiểm tra tổng hợp — chỉ mở khi đủ 10 bước đã đạt ≥80%
         locked = !eightDone;
         if (locked) {
           icon = '🔒';
-          extraLabel = ' <span style="color:var(--text-soft); font-size:12px; font-weight:normal;">(hoàn thành cả 8 bước ≥80% để mở)</span>';
+          extraLabel = ' <span style="color:var(--text-soft); font-size:12px; font-weight:normal;">(hoàn thành cả ' + TOTAL_LEARN_STEPS + ' bước ≥80% để mở)</span>';
         } else if (up.examResult) {
           const pct = Math.round((up.examResult.correct / up.examResult.total) * 100);
           icon = '✅';
@@ -1042,7 +1113,7 @@
  
   function enterStep(stepIndex) {
     currentStepIndex = stepIndex;
-    if (stepIndex === 8) {
+    if (stepIndex === 10) {
       reviewMode = false; // bài kiểm tra tổng hợp luôn tính điểm mới mỗi lần làm
       startGenericStep('unittest');
       return;
@@ -1050,7 +1121,7 @@
     const up = getUP(currentUnit.id);
     const result = up.stepResults[stepIndex];
     reviewMode = !!result && stepPassed(result); // đã đạt -> chỉ xem lại; chưa đạt/chưa làm -> tính điểm
-    const key = ['phonics','vocab','remove','fill','odd','reading','sentence','fillsentence'][stepIndex];
+    const key = ['phonics','vocab','remove','fill','odd','reading','sentence','fillsentence','writing','speaking'][stepIndex];
     if (key === 'phonics') { startPhonicsIntro(); }
     else if (key === 'vocab') { startVocabFlashcards(); }
     else { startGenericStep(key); }
@@ -1059,7 +1130,7 @@
   // ================= STEP COMPLETION =================
   function completeStep(correct, total) {
     const up = getUP(currentUnit.id);
-    if (currentStepIndex === 8) {
+    if (currentStepIndex === 10) {
       finishUnit(correct, total);
       return;
     }
@@ -1168,10 +1239,12 @@
     'reading': '6. Reading Stories',
     'sentence': '7. Sentence Builder',
     'fillsentence': '8. Fill Sentence',
-    'unittest': '9. Bài kiểm tra Unit'
+    'writing': '9. Writing (Viết)',
+    'speaking': '10. Speaking (Nói)',
+    'unittest': '11. Bài kiểm tra Unit'
   };
-  // map generic key to the actual step index (0..8) for progress recording
-  const KEY_TO_STEPINDEX = { 'phonics-check': 0, 'vocab-quiz': 1, 'remove': 2, 'fill': 3, 'odd': 4, 'reading': 5, 'sentence': 6, 'fillsentence': 7, 'unittest': 8 };
+  // map generic key to the actual step index (0..10) for progress recording
+  const KEY_TO_STEPINDEX = { 'phonics-check': 0, 'vocab-quiz': 1, 'remove': 2, 'fill': 3, 'odd': 4, 'reading': 5, 'sentence': 6, 'fillsentence': 7, 'writing': 8, 'speaking': 9, 'unittest': 10 };
  
   function startGenericStep(key) {
     currentStepIndex = KEY_TO_STEPINDEX[key];
@@ -1212,6 +1285,12 @@
     if (key === 'fillsentence') {
       return u.fillSentences.map(fs => ({ type: 'mcq', sentence: fs.before + ' ____ ' + fs.after, question: 'Chọn từ đúng điền vào chỗ trống', options: shuffle(fs.options), correct: fs.answer }));
     }
+    if (key === 'writing') {
+      return shuffle(u.words).map(w => ({ type: 'writing', word: w }));
+    }
+    if (key === 'speaking') {
+      return shuffle(u.words).map(w => ({ type: 'speaking', word: w }));
+    }
     if (key === 'unittest') {
       let all = [];
       all = all.concat(buildQueue('phonics-check'));
@@ -1222,6 +1301,7 @@
       all = all.concat(buildQueue('reading'));
       all = all.concat(buildQueue('sentence'));
       all = all.concat(buildQueue('fillsentence'));
+      all = all.concat(buildQueue('writing'));
       return shuffle(all);
     }
     return [];
@@ -1239,7 +1319,7 @@
   }
  
   function hideAllBlocks() {
-    ['mcq','fill','remove','odd','sentence'].forEach(b => document.getElementById('block-' + b).style.display = 'none');
+    ['mcq','fill','remove','odd','sentence','writing','speaking'].forEach(b => document.getElementById('block-' + b).style.display = 'none');
   }
  
   function renderStepQuestion() {
@@ -1256,6 +1336,8 @@
     else if (q.type === 'remove') renderRemove(q);
     else if (q.type === 'odd') renderOdd(q);
     else if (q.type === 'sentence') renderSentence(q);
+    else if (q.type === 'writing') renderWriting(q);
+    else if (q.type === 'speaking') renderSpeaking(q);
   }
  
   function goNext(correct) {
@@ -1510,6 +1592,110 @@
     if (ok) { fb.textContent = '✅ Chính xác!'; fb.className = 'feedback ok'; speak(q.target); }
     else { fb.textContent = '❌ Câu đúng là: "' + q.target + '"'; fb.className = 'feedback bad'; }
     goNext(ok);
+  });
+ 
+  // ================= WRITING (bước 9) =================
+  function renderWriting(q) {
+    document.getElementById('block-writing').style.display = 'block';
+    document.getElementById('writing-emoji').textContent = q.word.emoji;
+    const input = document.getElementById('writing-input');
+    input.value = '';
+    document.getElementById('writing-feedback').textContent = '';
+    document.getElementById('writing-feedback').className = 'feedback';
+    setTimeout(() => input.focus(), 50);
+  }
+  function checkWriting() {
+    if (stepAnswered) return;
+    const q = stepQueue[stepQIdx];
+    const val = document.getElementById('writing-input').value.trim().toLowerCase();
+    const correct = q.word.word.toLowerCase();
+    const ok = (val === correct);
+    stepAnswered = true;
+    const fb = document.getElementById('writing-feedback');
+    if (ok) { fb.textContent = '✅ Chính xác!'; fb.className = 'feedback ok'; speak(correct); }
+    else { fb.textContent = '❌ Đáp án đúng là: ' + correct; fb.className = 'feedback bad'; }
+    goNext(ok);
+  }
+  document.getElementById('writing-emoji').addEventListener('click', () => {
+    const q = stepQueue[stepQIdx];
+    if (q) speak(q.word.word);
+  });
+  document.getElementById('writing-check').addEventListener('click', checkWriting);
+  document.getElementById('writing-input').addEventListener('keydown', (e) => { if (e.key === 'Enter') checkWriting(); });
+ 
+  // ================= SPEAKING (bước 10) =================
+  const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
+  let recognizer = null;
+  if (SpeechRecognitionAPI) {
+    try {
+      recognizer = new SpeechRecognitionAPI();
+      recognizer.lang = 'en-US';
+      recognizer.maxAlternatives = 3;
+    } catch (e) { recognizer = null; }
+  }
+ 
+  function renderSpeaking(q) {
+    document.getElementById('block-speaking').style.display = 'block';
+    document.getElementById('speaking-emoji').textContent = q.word.emoji;
+    document.getElementById('speaking-word').textContent = q.word.word;
+    document.getElementById('speaking-feedback').textContent = '';
+    document.getElementById('speaking-feedback').className = 'feedback';
+    const micBtn = document.getElementById('speaking-mic');
+    const unsupportedBlock = document.getElementById('speaking-unsupported');
+    if (recognizer) {
+      micBtn.style.display = 'inline-block';
+      unsupportedBlock.style.display = 'none';
+    } else {
+      micBtn.style.display = 'none';
+      unsupportedBlock.style.display = 'block';
+    }
+  }
+  document.getElementById('speaking-listen').addEventListener('click', () => {
+    const q = stepQueue[stepQIdx];
+    if (q) speak(q.word.word);
+  });
+  document.getElementById('speaking-mic').addEventListener('click', () => {
+    if (stepAnswered || !recognizer) return;
+    const q = stepQueue[stepQIdx];
+    const micBtn = document.getElementById('speaking-mic');
+    const fb = document.getElementById('speaking-feedback');
+    micBtn.classList.add('listening');
+    fb.textContent = '🎧 Đang nghe... hãy đọc to nhé!';
+    fb.className = 'feedback';
+    try {
+      recognizer.start();
+    } catch (e) {
+      micBtn.classList.remove('listening');
+      fb.textContent = '⚠️ Không thể bật micro. Kiểm tra quyền truy cập micro của trình duyệt nhé.';
+      fb.className = 'feedback bad';
+      return;
+    }
+    recognizer.onresult = (event) => {
+      micBtn.classList.remove('listening');
+      if (stepAnswered) return;
+      const transcript = (event.results[0][0].transcript || '').toLowerCase().trim();
+      const correct = q.word.word.toLowerCase();
+      const ok = transcript.includes(correct) || correct.includes(transcript);
+      stepAnswered = true;
+      if (ok) { fb.textContent = '✅ Tuyệt vời! Máy nghe được: "' + transcript + '"'; fb.className = 'feedback ok'; }
+      else { fb.textContent = '❌ Máy nghe được: "' + transcript + '" — chưa khớp với "' + correct + '". Thử lại nhé!'; fb.className = 'feedback bad'; }
+      goNext(ok);
+    };
+    recognizer.onerror = (event) => {
+      micBtn.classList.remove('listening');
+      if (stepAnswered) return;
+      fb.textContent = '⚠️ Không nghe rõ, hãy thử lại (kiểm tra quyền micro nếu cần).';
+      fb.className = 'feedback bad';
+    };
+    recognizer.onend = () => { micBtn.classList.remove('listening'); };
+  });
+  document.getElementById('speaking-fallback-ok').addEventListener('click', () => {
+    if (stepAnswered) return;
+    stepAnswered = true;
+    const fb = document.getElementById('speaking-feedback');
+    fb.textContent = '✅ Đã ghi nhận!';
+    fb.className = 'feedback ok';
+    goNext(true);
   });
  
   // ================= INIT =================
