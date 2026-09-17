@@ -1,0 +1,1353 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lộ trình học Tiếng Anh lớp 2</title>
+<style>
+  :root {
+    --bg: #fff8e7; --card-bg: #ffffff; --text: #3a2e1f; --text-soft: #7a6a52;
+    --primary: #ff9800; --primary-dark: #e67e00; --pink: #ff6f91; --green: #4caf50;
+    --red: #e74c3c; --blue: #3498db; --purple: #9b59b6; --border: #ffe0a3; --shadow: rgba(0,0,0,0.08);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg:#241c12; --card-bg:#362a1a; --text:#fdf1de; --text-soft:#cbb894; --border:#55411f; --shadow:rgba(0,0,0,0.35);
+    }
+  }
+  :root[data-theme="dark"] { --bg:#241c12; --card-bg:#362a1a; --text:#fdf1de; --text-soft:#cbb894; --border:#55411f; --shadow:rgba(0,0,0,0.35); }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: 'Comic Sans MS', 'Baloo 2', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    min-height: 100vh; padding: 16px;
+  }
+  .app { max-width: 720px; margin: 0 auto; }
+
+  header.top {
+    background: linear-gradient(135deg, #ffd54f, #ff9800);
+    border-radius: 24px; padding: 18px 20px; display: flex; align-items: center; justify-content: space-between;
+    box-shadow: 0 4px 14px var(--shadow); flex-wrap: wrap; gap: 10px; color: #4a2c00;
+  }
+  header.top .title-block { display:flex; align-items:center; gap:10px; }
+  header.top .emoji { font-size: 36px; }
+  header.top h1 { font-size: 17px; margin: 0; line-height:1.3; }
+  header.top p { margin: 2px 0 0; font-size: 12px; opacity: 0.85; }
+  .back-btn { background: rgba(255,255,255,0.5); border:none; border-radius:12px; padding:8px 12px; font-weight:bold; cursor:pointer; color:#4a2c00; font-size:14px; }
+
+  .top-actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
+  .ta-btn {
+    border:none; border-radius:14px; padding:9px 14px; font-weight:bold; font-size:13px; cursor:pointer;
+    display:inline-flex; align-items:center; gap:6px; white-space:nowrap;
+  }
+  .ta-signin { background: linear-gradient(135deg,#ffb74d,#ff9800); color:white; }
+  .ta-signup { background: white; color: var(--purple); border:2px solid #e6c8f0 !important; }
+  .ta-locked1 { background: linear-gradient(135deg,#e05a2b,#b8441c); color:white; }
+  .ta-locked2 { background: linear-gradient(135deg,#1fae8e,#0f8f73); color:white; }
+
+  /* ===== Modal popup ===== */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.45);
+    display: none; align-items: center; justify-content: center; z-index: 1000; padding: 16px;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal-box {
+    background: linear-gradient(160deg, #fff8e7, #ffffff);
+    border-radius: 24px; max-width: 380px; width: 100%; padding: 24px 22px;
+    text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    border: 2px solid var(--border);
+  }
+  .modal-box .modal-icon {
+    width: 76px; height:76px; border-radius:50%; background: white; border: 3px solid var(--border);
+    display:flex; align-items:center; justify-content:center; font-size:36px; margin: 0 auto 12px;
+  }
+  .modal-box h3 { color: var(--primary-dark); font-size: 19px; margin: 0 0 12px; }
+  .modal-box p { font-size: 14px; color: var(--text); line-height:1.6; margin: 6px 0; }
+  .modal-note {
+    background: #d4f7dc; color:#1c6b2a; border-radius:14px; padding:10px 14px; font-size:13px;
+    margin: 14px 0; font-weight: bold;
+  }
+  .modal-btn { width:100%; border:none; border-radius:16px; padding:13px; font-weight:bold; font-size:15px; cursor:pointer; margin-bottom:10px; }
+  .modal-btn.signin { background: linear-gradient(135deg,#ffb74d,#ff9800); color:white; }
+  .modal-btn.signup { background:white; color: var(--purple); border:2px solid #e6c8f0; }
+  .modal-btn.later { background:#eef0f3; color:#5a6270; }
+
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* ===== UNIT MAP ===== */
+  .unit-list { display: flex; flex-direction: column; gap: 12px; margin-top: 18px; }
+  .unit-tile {
+    background: var(--card-bg); border-radius: 18px; padding: 16px; display: flex; align-items: center; gap: 14px;
+    box-shadow: 0 4px 12px var(--shadow); border: 2px solid var(--border); cursor: pointer; transition: transform 0.12s ease;
+  }
+  .unit-tile:active { transform: scale(0.98); }
+  .unit-tile.locked { opacity: 0.6; cursor: default; filter: grayscale(0.3); }
+  .unit-tile .unit-emoji { font-size: 40px; flex-shrink:0; }
+  .unit-tile .unit-info { flex: 1; }
+  .unit-tile .unit-info .u-name { font-weight:bold; font-size: 16px; }
+  .unit-tile .unit-info .u-sub { font-size: 12px; color: var(--text-soft); margin-top:2px; }
+  .unit-tile .u-status { font-size: 22px; }
+  .badge-pass { background:#d4f7dc; color:#1c6b2a; font-size:11px; font-weight:bold; padding:3px 8px; border-radius:10px; display:inline-block; margin-top:4px; }
+  .badge-progress { background:#fff3d0; color:#8a6100; font-size:11px; font-weight:bold; padding:3px 8px; border-radius:10px; display:inline-block; margin-top:4px; }
+  .lock-note { font-size: 11px; color: var(--text-soft); margin-top:4px; font-style: italic; }
+
+  /* ===== UNIT DETAIL (8 step list) ===== */
+  .step-list { display:flex; flex-direction:column; gap: 8px; margin-top: 16px; }
+  .step-tile {
+    background: var(--card-bg); border-radius: 14px; padding: 12px 14px; display:flex; align-items:center; gap: 12px;
+    border: 2px solid var(--border); box-shadow: 0 3px 8px var(--shadow); cursor: pointer;
+  }
+  .step-tile.locked { opacity: 0.5; cursor: default; }
+  .step-tile .step-num {
+    width:30px; height:30px; border-radius:50%; background:var(--primary); color:white;
+    display:flex; align-items:center; justify-content:center; font-weight:bold; flex-shrink:0; font-size: 13px;
+  }
+  .step-tile.locked .step-num { background: var(--text-soft); }
+  .step-tile .step-name { font-weight:bold; flex:1; font-size: 14px; }
+  .step-tile .step-check { font-size:18px; }
+
+  .card { background: var(--card-bg); border-radius: 20px; padding: 20px; box-shadow: 0 4px 14px var(--shadow); margin-top: 16px; }
+  .instructions { font-size: 13px; color: var(--text-soft); text-align:center; margin-bottom: 10px; }
+
+  /* ===== Flashcards ===== */
+  .flash-wrap { display:flex; flex-direction: column; align-items: center; gap: 14px; }
+  .flashcard {
+    width: 100%; max-width: 300px; aspect-ratio: 4/3; border-radius: 24px;
+    background: linear-gradient(160deg, #fff, #fff3d6); border: 3px solid var(--border);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+    cursor: pointer; user-select: none; box-shadow: 0 6px 0 var(--border); transition: transform 0.15s ease;
+  }
+  .flashcard:active { transform: translateY(4px); box-shadow: 0 2px 0 var(--border); }
+  .flashcard .emoji-big { font-size: 78px; }
+  .flashcard .word-en { font-size: 28px; font-weight: bold; color: var(--primary-dark); }
+  .flashcard .word-vi { font-size: 15px; color: var(--text-soft); display:none; }
+  .flashcard.flipped .word-vi { display: block; }
+  .flash-nav { display:flex; align-items:center; gap:16px; }
+  .flash-nav button { background: var(--primary); border:none; color:white; font-size:20px; width:40px; height:40px; border-radius:50%; cursor:pointer; box-shadow: 0 3px 0 var(--primary-dark); }
+  .flash-nav button:active { box-shadow:none; transform: translateY(3px); }
+  .flash-progress { font-weight:bold; color: var(--text-soft); font-size: 13px; }
+  .speak-btn { background: var(--blue); color: white; border:none; padding: 8px 16px; border-radius: 14px; font-weight:bold; font-size:14px; cursor:pointer; box-shadow: 0 3px 0 #2678a8; }
+  .speak-btn:active { transform: translateY(3px); box-shadow:none; }
+  .primary-btn { margin-top: 10px; background: var(--pink); color:white; border:none; padding:12px 22px; border-radius:16px; font-weight:bold; cursor:pointer; box-shadow: 0 3px 0 #c2485f; font-size:15px; }
+  .primary-btn:active { transform: translateY(3px); box-shadow:none; }
+  .primary-btn.green { background: var(--green); box-shadow: 0 3px 0 #2e7d32; }
+  .primary-btn.purple { background: var(--purple); box-shadow: 0 3px 0 #6c3483; }
+
+  /* ===== progress dots ===== */
+  .dots { display:flex; justify-content:center; gap:6px; margin-bottom:14px; }
+  .dots span { width:10px; height:10px; border-radius:50%; background: var(--border); }
+  .dots span.done { background: var(--green); }
+  .dots span.wrong-dot { background: var(--red); }
+  .dots span.current { background: var(--primary); }
+
+  /* ===== step header inside player ===== */
+  .step-title { text-align:center; font-weight:bold; font-size: 15px; color: var(--text-soft); margin-bottom: 6px; }
+
+  /* ===== MCQ block ===== */
+  .mcq-prompt { text-align:center; }
+  .mcq-prompt .emoji-big { font-size: 84px; }
+  .mcq-prompt .sentence-display { font-size: 18px; font-weight:bold; margin: 10px 0; line-height:1.5; }
+  .mcq-prompt .story-text { font-size: 15px; line-height:1.6; background: var(--bg); border-radius:12px; padding:12px; margin-bottom:10px; text-align:left; }
+  .options { display:flex; flex-direction:column; gap:10px; margin-top: 14px; }
+  .opt-btn { background: var(--card-bg); border: 2px solid var(--border); border-radius: 14px; padding: 12px; font-size: 17px; font-weight: bold; cursor: pointer; color: var(--text); }
+  .opt-btn.correct { background: #d4f7dc; border-color: var(--green); color:#1c6b2a; }
+  .opt-btn.wrong { background: #fbdcdc; border-color: var(--red); color:#a12727; }
+  .opt-btn[disabled] { cursor: default; }
+  .opt-btn.opt-locked { cursor: not-allowed; }
+  .opt-btn.opt-locked .opt-label { opacity: 0.45; }
+  .opt-speak-icon {
+    display: inline-flex; align-items:center; justify-content:center;
+    width: 32px; height: 32px; border-radius: 50%; background: var(--blue); color: white;
+    font-size: 14px; cursor: pointer; flex-shrink: 0;
+  }
+  .opt-speak-icon.heard { background: var(--green); }
+  .listen-hint { text-align:center; font-size: 13px; color: var(--primary-dark); font-weight:bold; margin-bottom: 10px; }
+  .listen-hint.all-done { color: var(--green); }
+
+  /* ===== Fill missing ===== */
+  .fill-item { text-align:center; }
+  .fill-item .emoji-big { font-size: 76px; }
+  .fill-word { font-size: 32px; font-weight:bold; letter-spacing: 3px; margin: 12px 0; color: var(--primary-dark); }
+  .fill-word input { width: 44px; height: 52px; font-size: 28px; text-align:center; font-weight:bold; border: 3px solid var(--primary); border-radius: 10px; margin: 0 2px; text-transform: lowercase; background: var(--card-bg); color: var(--text); }
+  .check-btn { background: var(--green); color:white; border:none; padding: 10px 24px; border-radius:16px; font-weight:bold; font-size:16px; cursor:pointer; box-shadow: 0 3px 0 #2e7d32; }
+  .check-btn:active { transform: translateY(3px); box-shadow:none; }
+  .feedback { margin-top:10px; font-weight:bold; font-size:15px; min-height: 22px; text-align:center; }
+  .feedback.ok { color: var(--green); }
+  .feedback.bad { color: var(--red); }
+
+  /* ===== Remove letter ===== */
+  .remove-item { text-align:center; }
+  .remove-item .emoji-big { font-size: 76px; }
+  .letters-row { display:flex; justify-content:center; gap:4px; margin: 16px 0; flex-wrap:wrap; }
+  .letter-btn {
+    width: 42px; height:50px; font-size: 24px; font-weight:bold; border-radius:10px;
+    border: 2px solid var(--border); background: var(--card-bg); color: var(--text); cursor:pointer;
+  }
+  .letter-btn.removed-correct { background:#d4f7dc; border-color: var(--green); }
+  .letter-btn.removed-wrong { background:#fbdcdc; border-color: var(--red); }
+  .letter-btn[disabled] { cursor:default; }
+
+  /* ===== Odd one out ===== */
+  .odd-grid { display:grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px; }
+  .odd-card {
+    background: var(--bg); border: 3px solid var(--border); border-radius: 16px; padding: 14px;
+    text-align:center; cursor:pointer;
+  }
+  .odd-card .oc-emoji { font-size: 50px; }
+  .odd-card .oc-label { font-weight:bold; margin-top:4px; font-size:14px; }
+  .odd-card.correct { border-color: var(--green); background:#d4f7dc; }
+  .odd-card.wrong { border-color: var(--red); background:#fbdcdc; }
+
+  /* ===== Sentence builder ===== */
+  .sentence-answer-area {
+    min-height: 56px; border: 2px dashed var(--border); border-radius: 14px; padding: 10px;
+    display:flex; flex-wrap:wrap; gap:6px; align-items:center; justify-content:center; margin-bottom: 14px;
+  }
+  .word-chip {
+    background: var(--primary); color:white; border:none; padding: 8px 14px; border-radius: 12px;
+    font-weight:bold; font-size:15px; cursor:pointer;
+  }
+  .word-chip.placed { background: var(--card-bg); color: var(--text); border: 2px solid var(--border); }
+  .chip-bank { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-bottom: 14px; }
+
+  /* ===== Result screen ===== */
+  .result-screen { text-align:center; padding: 10px; }
+  .result-screen .big-emoji { font-size: 60px; }
+  .score-circle {
+    width: 120px; height:120px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    flex-direction:column; margin: 14px auto; border: 8px solid var(--border);
+  }
+  .score-circle.pass { border-color: var(--green); }
+  .score-circle.fail { border-color: var(--red); }
+  .score-circle .pct { font-size: 26px; font-weight:bold; }
+  .score-circle .lbl { font-size: 10px; color: var(--text-soft); }
+  .unlock-msg { font-weight:bold; font-size:15px; margin: 10px 0; }
+  .unlock-msg.pass { color: var(--green); }
+  .unlock-msg.fail { color: var(--red); }
+
+  .step-done-banner { text-align:center; padding: 30px 10px; }
+  .step-done-banner .big-emoji { font-size:56px; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="top">
+    <div class="title-block">
+      <div class="emoji" id="header-emoji">🗺️</div>
+      <div>
+        <h1 id="header-title">Lộ trình Tiếng Anh lớp 2</h1>
+        <p id="header-sub">Chọn Unit để bắt đầu học nhé!</p>
+      </div>
+    </div>
+    <button class="back-btn" id="back-btn" style="display:none;">‹ Quay lại</button>
+  </header>
+
+  <div class="top-actions" id="top-actions">
+    <button class="ta-btn ta-signin" id="ta-signin">Sign in</button>
+    <button class="ta-btn ta-signup" id="ta-signup">Sign up</button>
+    <button class="ta-btn ta-locked1" id="ta-map">🗺️ Bản đồ tuần 🔒</button>
+    <button class="ta-btn ta-locked2" id="ta-minigame">🎮 Mini Game 🔒</button>
+  </div>
+
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-icon" id="modal-icon">🐝</div>
+      <h3 id="modal-title">Bản đồ tuần / Tiến trình tuần</h3>
+      <p id="modal-desc">Đây là tính năng dành cho tài khoản Trial hoặc VIP. Con có thể Sign in nếu đã có tài khoản hoặc Sign up để đăng ký nhé!</p>
+      <div class="modal-note">🌻 Các Unit cơ bản vẫn học miễn phí bình thường nhé!</div>
+      <button class="modal-btn signin">Sign in</button>
+      <button class="modal-btn signup">Sign up</button>
+      <button class="modal-btn later" id="modal-later">Để sau nhé</button>
+    </div>
+  </div>
+
+  <!-- SCREEN: UNIT MAP -->
+  <div class="screen active" id="screen-map">
+    <div class="unit-list" id="unit-list"></div>
+  </div>
+
+  <!-- SCREEN: UNIT DETAIL (8 bước) -->
+  <div class="screen" id="screen-unit-detail">
+    <div class="step-list" id="step-list"></div>
+  </div>
+
+  <!-- SCREEN: STEP DONE transition -->
+  <div class="screen" id="screen-step-done">
+    <div class="card step-done-banner">
+      <div class="big-emoji">✅</div>
+      <h2 id="step-done-title">Hoàn thành bước!</h2>
+      <p id="step-done-sub"></p>
+      <button class="primary-btn" id="step-done-continue">Tiếp tục</button>
+    </div>
+  </div>
+
+  <!-- SCREEN: VOCAB FLASHCARDS (bước 2 riêng vì có flashcard trước quiz) -->
+  <div class="screen" id="screen-vocab">
+    <div class="card">
+      <div class="flash-wrap">
+        <div class="flashcard" id="flashcard">
+          <div class="emoji-big" id="fc-emoji"></div>
+          <div class="word-en" id="fc-word"></div>
+          <div class="word-vi" id="fc-vi"></div>
+        </div>
+        <button class="speak-btn" id="fc-speak">🔊 Nghe phát âm</button>
+        <div class="flash-nav">
+          <button id="fc-prev">‹</button>
+          <div class="flash-progress"><span id="fc-index">1</span> / <span id="fc-total">3</span></div>
+          <button id="fc-next">›</button>
+        </div>
+        <button class="primary-btn" id="go-to-vocab-quiz">📝 Vào câu hỏi</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREEN: PHONICS INTRO (bước 1 riêng vì có phần giới thiệu âm) -->
+  <div class="screen" id="screen-phonics-intro">
+    <div class="card" style="text-align:center;">
+      <div style="font-size:100px; font-weight:bold; color:var(--primary-dark);" id="phonics-letter-big"></div>
+      <button class="speak-btn" id="phonics-speak-letter">🔊 Nghe âm chữ cái</button>
+      <div class="instructions" style="margin-top:14px;">Các từ có chứa âm này (chạm vào từng hình để nghe):</div>
+      <div style="display:flex; justify-content:center; gap:16px; margin: 10px 0;" id="phonics-word-row"></div>
+      <button class="primary-btn" id="phonics-continue">📝 Vào câu hỏi</button>
+    </div>
+  </div>
+
+  <!-- SCREEN: GENERIC STEP PLAYER (dùng cho remove, fill, odd, reading, sentence, fillsentence, các câu quiz của phonics/vocab) -->
+  <div class="screen" id="screen-step-player">
+    <div class="card">
+      <div class="step-title" id="sp-title"></div>
+      <div class="dots" id="sp-dots"></div>
+
+      <div id="block-mcq" style="display:none;">
+        <div class="mcq-prompt">
+          <div class="emoji-big" id="mcq-emoji" style="display:none;"></div>
+          <div class="story-text" id="mcq-story" style="display:none;"></div>
+          <button class="speak-btn" id="mcq-story-speak" style="display:none; margin-bottom:10px;">🔊 Nghe đoạn văn</button>
+          <div class="sentence-display" id="mcq-sentence" style="display:none;"></div>
+          <div class="instructions" id="mcq-question"></div>
+          <button class="speak-btn" id="mcq-question-speak" style="display:none; margin-bottom:10px;">🔊 Nghe câu hỏi</button>
+          <div class="listen-hint" id="mcq-listen-hint"></div>
+          <div class="options" id="mcq-options"></div>
+        </div>
+      </div>
+
+      <div id="block-fill" style="display:none;">
+        <div class="fill-item">
+          <div class="emoji-big" id="fill-emoji"></div>
+          <div class="fill-word" id="fill-word-wrap"></div>
+          <button class="check-btn" id="fill-check">✅ Kiểm tra</button>
+          <div class="feedback" id="fill-feedback"></div>
+        </div>
+      </div>
+
+      <div id="block-remove" style="display:none;">
+        <div class="remove-item">
+          <div class="emoji-big" id="remove-emoji"></div>
+          <div class="instructions">Chạm vào chữ cái thừa để xoá</div>
+          <div class="letters-row" id="letters-row"></div>
+          <div class="feedback" id="remove-feedback"></div>
+        </div>
+      </div>
+
+      <div id="block-odd" style="display:none;">
+        <div class="instructions" id="odd-question">Từ nào khác với các từ còn lại?</div>
+        <div class="odd-grid" id="odd-grid"></div>
+        <div class="feedback" id="odd-feedback"></div>
+      </div>
+
+      <div id="block-sentence" style="display:none;">
+        <div class="instructions">Sắp xếp các từ thành câu đúng</div>
+        <div class="sentence-answer-area" id="sentence-answer-area"></div>
+        <div class="chip-bank" id="sentence-chip-bank"></div>
+        <button class="check-btn" id="sentence-check">✅ Kiểm tra</button>
+        <div class="feedback" id="sentence-feedback"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREEN: RESULT -->
+  <div class="screen" id="screen-result">
+    <div class="card result-screen">
+      <div class="big-emoji" id="result-emoji">🏆</div>
+      <h2 id="result-title">Hoàn thành!</h2>
+      <div class="score-circle" id="score-circle">
+        <div class="pct" id="result-pct">0%</div>
+        <div class="lbl">chính xác</div>
+      </div>
+      <div class="unlock-msg" id="unlock-msg"></div>
+      <button class="primary-btn" id="result-retry">🔁 Học lại toàn bộ Unit</button>
+      <button class="primary-btn green" id="result-next" style="display:none;">➡️ Sang Unit tiếp theo</button>
+      <button class="primary-btn purple" id="result-map">🗺️ Về bản đồ Unit</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function() {
+  // ================= DATA =================
+  const STEP_LABELS = [
+    "1. Phonics & Sounds", "2. Vocabulary", "3. Remove Letter", "4. Fill Missing",
+    "5. Odd One Out", "6. Reading Stories", "7. Sentence Builder", "8. Fill Sentence"
+  ];
+
+  const UNITS = [
+    {
+      id: 1, title: "Unit 1: At my birthday party", emoji: "🎂",
+      phonicsLetter: { upper: "P", lower: "p" },
+      distractor: { word: "dog", vi: "con chó", emoji: "🐶" },
+      words: [
+        { word: "pizza",   vi: "bánh pizza", emoji: "🍕", missingIndex: 0, extraLetters: "pizzxa".split(''), extraPos: 4 },
+        { word: "popcorn", vi: "bỏng ngô",   emoji: "🍿", missingIndex: 0, extraLetters: "popqcorn".split(''), extraPos: 3 },
+        { word: "pasta",   vi: "mì Ý",       emoji: "🍝", missingIndex: 0, extraLetters: "parsta".split(''), extraPos: 2 },
+      ],
+      story: {
+        text: "It is Mai's birthday. She has pizza, popcorn, and pasta for her friends.",
+        question: "What does Mai have at her party?",
+        options: ["Pizza, popcorn, and pasta", "A kite and a bike", "A book and a pen"],
+        answerIndex: 0
+      },
+      sentenceTarget: "The popcorn is yummy.",
+      fillSentences: [
+        { before: "I like", after: ".", answer: "pizza", options: ["pizza", "kite", "dog"] },
+        { before: "She has some", after: "for the party.", answer: "popcorn", options: ["popcorn", "bike", "book"] },
+        { before: "This", after: "is delicious.", answer: "pasta", options: ["pasta", "kitten", "rainbow"] },
+      ]
+    },
+    {
+      id: 2, title: "Unit 2: In the backyard", emoji: "🏡",
+      phonicsLetter: { upper: "K", lower: "k" },
+      distractor: { word: "sun", vi: "mặt trời", emoji: "☀️" },
+      words: [
+        { word: "kite",   vi: "cái diều", emoji: "🪁", missingIndex: 0, extraLetters: "kitle".split(''), extraPos: 3 },
+        { word: "bike",   vi: "xe đạp",   emoji: "🚲", missingIndex: 0, extraLetters: "bilke".split(''), extraPos: 2 },
+        { word: "kitten", vi: "mèo con",  emoji: "🐱", missingIndex: 0, extraLetters: "kitpten".split(''), extraPos: 3 },
+      ],
+      story: {
+        text: "Tom is in the backyard. He has a kite and a bike. His kitten is playing near him.",
+        question: "Where is Tom?",
+        options: ["In the backyard", "At the zoo", "In the classroom"],
+        answerIndex: 0
+      },
+      sentenceTarget: "Is she flying a kite?",
+      fillSentences: [
+        { before: "Look at the", after: "in the sky!", answer: "kite", options: ["kite", "bike", "kitten"] },
+        { before: "Can you ride a", after: "?", answer: "bike", options: ["bike", "kite", "kitten"] },
+        { before: "The", after: "is sleeping.", answer: "kitten", options: ["kitten", "bike", "kite"] },
+      ]
+    },
+    {
+      id: 3, title: "Unit 3: At the seaside", emoji: "🏖️",
+      phonicsLetter: { upper: "S", lower: "s" },
+      distractor: { word: "tree", vi: "cái cây", emoji: "🌳" },
+      words: [
+        { word: "sail", vi: "cánh buồm", emoji: "⛵", missingIndex: 0, extraLetters: "saxil".split(''), extraPos: 2 },
+        { word: "sand", vi: "cát",       emoji: "🏖️", missingIndex: 0, extraLetters: "sarnd".split(''), extraPos: 1 },
+        { word: "sea",  vi: "biển",      emoji: "🌊", missingIndex: 0, extraLetters: "sqea".split(''), extraPos: 1 },
+      ],
+      story: {
+        text: "Ben is at the seaside. He sees the sail, the sand, and the sea.",
+        question: "What does Ben see at the seaside?",
+        options: ["The sail, the sand, and the sea", "A kite and a bike", "A book and a pen"],
+        answerIndex: 0
+      },
+      sentenceTarget: "Let's look at the sea!",
+      fillSentences: [
+        { before: "Look at the", after: "on the boat.", answer: "sail", options: ["sail", "sand", "sea"] },
+        { before: "We play on the", after: ".", answer: "sand", options: ["sand", "sail", "sea"] },
+        { before: "Let's swim in the", after: "!", answer: "sea", options: ["sea", "sail", "sand"] },
+      ]
+    },
+    {
+      id: 4, title: "Unit 4: In the countryside", emoji: "🌄",
+      phonicsLetter: { upper: "R", lower: "r" },
+      distractor: { word: "cat", vi: "con mèo", emoji: "🐱" },
+      words: [
+        { word: "rainbow", vi: "cầu vồng", emoji: "🌈", missingIndex: 0, extraLetters: "raxinbow".split(''), extraPos: 2 },
+        { word: "river",   vi: "dòng sông", emoji: "🏞️", missingIndex: 0, extraLetters: "riqver".split(''), extraPos: 2 },
+        { word: "road",    vi: "con đường", emoji: "🛣️", missingIndex: 0, extraLetters: "rozad".split(''), extraPos: 2 },
+      ],
+      story: {
+        text: "Lily is in the countryside. She can see a rainbow, a river, and a road.",
+        question: "What can Lily see?",
+        options: ["A rainbow, a river, and a road", "A kite and a bike", "A book and a pen"],
+        answerIndex: 0
+      },
+      sentenceTarget: "I can see a rainbow.",
+      fillSentences: [
+        { before: "I can see a", after: "in the sky.", answer: "rainbow", options: ["rainbow", "river", "road"] },
+        { before: "The boat is on the", after: ".", answer: "river", options: ["river", "rainbow", "road"] },
+        { before: "Cars drive on the", after: ".", answer: "road", options: ["road", "rainbow", "river"] },
+      ]
+    },
+    {
+      id: 5, title: "Unit 5: In the classroom", emoji: "🏫",
+      phonicsLetter: { upper: "Q", lower: "q" },
+      distractor: { word: "sun", vi: "mặt trời", emoji: "☀️" },
+      words: [
+        { word: "question", vi: "câu hỏi",   emoji: "❓", missingIndex: 0, extraLetters: "quexstion".split(''), extraPos: 4 },
+        { word: "square",   vi: "hình vuông", emoji: "🟦", missingIndex: 0, extraLetters: "sqzuare".split(''), extraPos: 2 },
+        { word: "quiz",     vi: "bài kiểm tra nhỏ", emoji: "📝", missingIndex: 0, extraLetters: "qauiz".split(''), extraPos: 1 },
+      ],
+      story: {
+        text: "In the classroom, Nam has a question, a square, and a quiz.",
+        question: "What does Nam have in the classroom?",
+        options: ["A question, a square, and a quiz", "A kite and a bike", "A book and a pen"],
+        answerIndex: 0
+      },
+      sentenceTarget: "He's doing a quiz.",
+      fillSentences: [
+        { before: "Please answer my", after: ".", answer: "question", options: ["question", "square", "quiz"] },
+        { before: "Draw a", after: "on the paper.", answer: "square", options: ["square", "question", "quiz"] },
+        { before: "Let's do a", after: "!", answer: "quiz", options: ["quiz", "question", "square"] },
+      ]
+    },
+    {
+      id: 6, title: "Unit 6: On the farm", emoji: "🚜",
+      phonicsLetter: { upper: "X", lower: "x" },
+      distractor: { word: "cat", vi: "con mèo", emoji: "🐱" },
+      words: [
+        { word: "box", vi: "cái hộp",     emoji: "📦", missingIndex: 0, extraLetters: "brox".split(''), extraPos: 1 },
+        { word: "fox", vi: "con cáo",     emoji: "🦊", missingIndex: 0, extraLetters: "ftox".split(''), extraPos: 1 },
+        { word: "ox",  vi: "con bò đực",  emoji: "🐂", missingIndex: 0, extraLetters: "mox".split(''), extraPos: 0 },
+      ],
+      story: {
+        text: "On the farm, there is a box, a fox, and an ox.",
+        question: "What is on the farm?",
+        options: ["A box, a fox, and an ox", "A kite and a bike", "A book and a pen"],
+        answerIndex: 0
+      },
+      sentenceTarget: "Is there a fox?",
+      fillSentences: [
+        { before: "Put the toy in the", after: ".", answer: "box", options: ["box", "fox", "ox"] },
+        { before: "The", after: "runs fast.", answer: "fox", options: ["fox", "box", "ox"] },
+        { before: "The", after: "is big and strong.", answer: "ox", options: ["ox", "box", "fox"] },
+      ]
+    },
+    {
+      id: 7, title: "Unit 7: In the kitchen", emoji: "🍳",
+      phonicsLetter: { upper: "J", lower: "j" },
+      distractor: { word: "sun", vi: "mặt trời", emoji: "☀️" },
+      words: [
+        { word: "juice", vi: "nước ép", emoji: "🧃", missingIndex: 0, extraLetters: "juxice".split(''), extraPos: 2 },
+        { word: "jelly", vi: "thạch",   emoji: "🍮", missingIndex: 0, extraLetters: "jrelly".split(''), extraPos: 1 },
+        { word: "jam",   vi: "mứt",     emoji: "🍯", missingIndex: 0, extraLetters: "jqam".split(''), extraPos: 1 },
+      ],
+      story: {
+        text: "In the kitchen, Mom has juice, jelly, and jam.",
+        question: "What does Mom have in the kitchen?",
+        options: ["Juice, jelly, and jam", "A kite and a bike", "A book and a pen"],
+        answerIndex: 0
+      },
+      sentenceTarget: "Pass me the jam, please.",
+      fillSentences: [
+        { before: "I drink some", after: "every morning.", answer: "juice", options: ["juice", "jelly", "jam"] },
+        { before: "She spreads", after: "on the bread.", answer: "jelly", options: ["jelly", "juice", "jam"] },
+        { before: "Pass me the", after: ", please.", answer: "jam", options: ["jam", "juice", "jelly"] },
+      ]
+    },
+    {
+      id: 8, title: "Unit 8: In the village", emoji: "🏘️",
+      phonicsLetter: { upper: "V", lower: "v" },
+      distractor: { word: "cat", vi: "con mèo", emoji: "🐱" },
+      words: [
+        { word: "village",   vi: "làng",        emoji: "🏘️", missingIndex: 0, extraLetters: "vilxlage".split(''), extraPos: 3 },
+        { word: "van",       vi: "xe van",      emoji: "🚐", missingIndex: 0, extraLetters: "vzan".split(''), extraPos: 1 },
+        { word: "volleyball",vi: "bóng chuyền", emoji: "🏐", missingIndex: 0, extraLetters: "vollxeyball".split(''), extraPos: 4 },
+      ],
+      story: {
+        text: "This is Tom's village. He has a van and plays volleyball.",
+        question: "What does Tom have?",
+        options: ["A van and a volleyball", "A kite and a bike", "A book and a pen"],
+        answerIndex: 0
+      },
+      sentenceTarget: "Can you draw a van?",
+      fillSentences: [
+        { before: "This is a small", after: ".", answer: "village", options: ["village", "van", "volleyball"] },
+        { before: "Dad drives the", after: ".", answer: "van", options: ["van", "village", "volleyball"] },
+        { before: "We play", after: "at the beach.", answer: "volleyball", options: ["volleyball", "village", "van"] },
+      ]
+    },
+    {
+      id: 9, title: "Unit 9: In the grocery store", emoji: "🛒",
+      phonicsLetter: { upper: "Y", lower: "y" },
+      distractor: { word: "sun", vi: "mặt trời", emoji: "☀️" },
+      words: [
+        { word: "yogurt", vi: "sữa chua",  emoji: "🥣", missingIndex: 0, extraLetters: "yoxgurt".split(''), extraPos: 2 },
+        { word: "yams",   vi: "khoai lang", emoji: "🍠", missingIndex: 0, extraLetters: "yqams".split(''), extraPos: 1 },
+        { word: "yoyo",   vi: "cái yoyo",   emoji: "🪀", missingIndex: 0, extraLetters: "yoxyo".split(''), extraPos: 2 },
+      ],
+      story: {
+        text: "At the grocery store, Mia buys yogurt, yams, and a yoyo.",
+        question: "What does Mia buy?",
+        options: ["Yogurt, yams, and a yoyo", "A kite and a bike", "A book and a pen"],
+        answerIndex: 0
+      },
+      sentenceTarget: "I want some yams.",
+      fillSentences: [
+        { before: "I eat", after: "for breakfast.", answer: "yogurt", options: ["yogurt", "yams", "yoyo"] },
+        { before: "We grow", after: "in the garden.", answer: "yams", options: ["yams", "yogurt", "yoyo"] },
+        { before: "She plays with her", after: ".", answer: "yoyo", options: ["yoyo", "yogurt", "yams"] },
+      ]
+    },
+    {
+      id: 10, title: "Unit 10: At the zoo", emoji: "🦁",
+      phonicsLetter: { upper: "Z", lower: "z" },
+      distractor: { word: "cat", vi: "con mèo", emoji: "🐱" },
+      words: [
+        { word: "zoo",   vi: "sở thú",   emoji: "🦁", missingIndex: 0, extraLetters: "zxoo".split(''), extraPos: 1 },
+        { word: "zebu",  vi: "bò u",     emoji: "🐃", missingIndex: 0, extraLetters: "zeqbu".split(''), extraPos: 2 },
+        { word: "zebra", vi: "ngựa vằn", emoji: "🦓", missingIndex: 0, extraLetters: "zebxra".split(''), extraPos: 3 },
+      ],
+      story: {
+        text: "At the zoo, Alex sees a zebu and a zebra.",
+        question: "What does Alex see at the zoo?",
+        options: ["A zebu and a zebra", "A kite and a bike", "A book and a pen"],
+        answerIndex: 0
+      },
+      sentenceTarget: "Do you like the zoo?",
+      fillSentences: [
+        { before: "We visit the", after: "every summer.", answer: "zoo", options: ["zoo", "zebu", "zebra"] },
+        { before: "The", after: "has a hump.", answer: "zebu", options: ["zebu", "zoo", "zebra"] },
+        { before: "The", after: "has black and white stripes.", answer: "zebra", options: ["zebra", "zoo", "zebu"] },
+      ]
+    },
+    {
+      id: 11, title: "Unit 11: In the playground", emoji: "🛝",
+      phonicsLetter: { upper: "I", lower: "i" },
+      distractor: { word: "sun", vi: "mặt trời", emoji: "☀️" },
+      words: [
+        { word: "sliding",  vi: "trượt",    emoji: "🛝", missingIndex: 0, extraLetters: "sxliding".split(''), extraPos: 1 },
+        { word: "riding",   vi: "đạp xe",   emoji: "🚲", missingIndex: 0, extraLetters: "rqiding".split(''), extraPos: 1 },
+        { word: "driving",  vi: "lái xe",   emoji: "🚗", missingIndex: 0, extraLetters: "drxiving".split(''), extraPos: 2 },
+      ],
+      story: {
+        text: "In the playground, the children are sliding, riding, and driving toy cars.",
+        question: "What are the children doing?",
+        options: ["Sliding, riding, and driving", "A kite and a bike", "A book and a pen"],
+        answerIndex: 0
+      },
+      sentenceTarget: "They're driving cars.",
+      fillSentences: [
+        { before: "The children are", after: "down the slide.", answer: "sliding", options: ["sliding", "riding", "driving"] },
+        { before: "He is", after: "his bike.", answer: "riding", options: ["riding", "sliding", "driving"] },
+        { before: "Dad is", after: "the car.", answer: "driving", options: ["driving", "sliding", "riding"] },
+      ]
+    },
+    {
+      id: 12, title: "Unit 12: At the café", emoji: "☕",
+      phonicsLetter: { upper: "A", lower: "a" },
+      distractor: { word: "tree", vi: "cái cây", emoji: "🌳" },
+      words: [
+        { word: "grapes", vi: "nho",      emoji: "🍇", missingIndex: 0, extraLetters: "graxpes".split(''), extraPos: 2 },
+        { word: "cake",   vi: "bánh kem", emoji: "🎂", missingIndex: 0, extraLetters: "cqake".split(''), extraPos: 1 },
+        { word: "table",  vi: "cái bàn",  emoji: "🍽️", missingIndex: 0, extraLetters: "taxble".split(''), extraPos: 2 },
+      ],
+      story: {
+        text: "At the café, there are grapes and a cake on the table.",
+        question: "Where are the grapes and the cake?",
+        options: ["On the table", "A kite and a bike", "A book and a pen"],
+        answerIndex: 0
+      },
+      sentenceTarget: "The cake is on the table.",
+      fillSentences: [
+        { before: "I like eating sweet", after: ".", answer: "grapes", options: ["grapes", "cake", "table"] },
+        { before: "We share a", after: "on birthdays.", answer: "cake", options: ["cake", "grapes", "table"] },
+        { before: "Put the plate on the", after: ".", answer: "table", options: ["table", "grapes", "cake"] },
+      ]
+    },
+    {
+      id: 13, title: "Unit 13: In the maths class", emoji: "🔢",
+      phonicsLetter: { upper: "N", lower: "n" },
+      distractor: { word: "cat", vi: "con mèo", emoji: "🐱" },
+      words: [
+        { word: "eleven",   vi: "mười một", emoji: "1️⃣1️⃣", missingIndex: 0, extraLetters: "elxeven".split(''), extraPos: 2 },
+        { word: "thirteen", vi: "mười ba",  emoji: "1️⃣3️⃣", missingIndex: 0, extraLetters: "thixrteen".split(''), extraPos: 3 },
+        { word: "fourteen", vi: "mười bốn", emoji: "1️⃣4️⃣", missingIndex: 0, extraLetters: "fouxrteen".split(''), extraPos: 3 },
+      ],
+      story: {
+        text: "In the maths class, Ann counts eleven, thirteen, and fourteen.",
+        question: "What numbers does Ann count?",
+        options: ["Eleven, thirteen, and fourteen", "A kite and a bike", "A book and a pen"],
+        answerIndex: 0
+      },
+      sentenceTarget: "It's eleven.",
+      fillSentences: [
+        { before: "I have", after: "candies.", answer: "eleven", options: ["eleven", "thirteen", "fourteen"] },
+        { before: "She is", after: "years old.", answer: "thirteen", options: ["thirteen", "eleven", "fourteen"] },
+        { before: "There are", after: "students.", answer: "fourteen", options: ["fourteen", "eleven", "thirteen"] },
+      ]
+    },
+    {
+      id: 14, title: "Unit 14: At home", emoji: "🏠",
+      phonicsLetter: { upper: "ER", lower: "er" },
+      distractor: { word: "sun", vi: "mặt trời", emoji: "☀️" },
+      words: [
+        { word: "brother",    vi: "anh/em trai", emoji: "👦", missingIndex: 0, extraLetters: "brxother".split(''), extraPos: 2 },
+        { word: "sister",     vi: "chị/em gái",  emoji: "👧", missingIndex: 0, extraLetters: "siqster".split(''), extraPos: 2 },
+        { word: "grandmother",vi: "bà",          emoji: "👵", missingIndex: 0, extraLetters: "granxdmother".split(''), extraPos: 3 },
+      ],
+      story: {
+        text: "At home, Ken lives with his brother, his sister, and his grandmother.",
+        question: "Who does Ken live with?",
+        options: ["His brother, his sister, and his grandmother", "A kite and a bike", "A book and a pen"],
+        answerIndex: 0
+      },
+      sentenceTarget: "How old is your brother?",
+      fillSentences: [
+        { before: "My", after: "plays football.", answer: "brother", options: ["brother", "sister", "grandmother"] },
+        { before: "My", after: "likes to sing.", answer: "sister", options: ["sister", "brother", "grandmother"] },
+        { before: "My", after: "tells nice stories.", answer: "grandmother", options: ["grandmother", "brother", "sister"] },
+      ]
+    },
+    {
+      id: 15, title: "Unit 15: In the clothes shop", emoji: "👕",
+      phonicsLetter: { upper: "SH", lower: "sh" },
+      distractor: { word: "cat", vi: "con mèo", emoji: "🐱" },
+      words: [
+        { word: "shirts", vi: "áo sơ mi", emoji: "👕", missingIndex: 0, extraLetters: "shxirts".split(''), extraPos: 2 },
+        { word: "shoes",  vi: "giày",     emoji: "👟", missingIndex: 0, extraLetters: "shqoes".split(''), extraPos: 2 },
+        { word: "shorts", vi: "quần short", emoji: "🩳", missingIndex: 0, extraLetters: "shxorts".split(''), extraPos: 2 },
+      ],
+      story: {
+        text: "In the clothes shop, Kate buys shirts, shoes, and shorts.",
+        question: "What does Kate buy?",
+        options: ["Shirts, shoes, and shorts", "A kite and a bike", "A book and a pen"],
+        answerIndex: 0
+      },
+      sentenceTarget: "Where are the shoes?",
+      fillSentences: [
+        { before: "He wears blue", after: ".", answer: "shirts", options: ["shirts", "shoes", "shorts"] },
+        { before: "Put on your", after: "before school.", answer: "shoes", options: ["shoes", "shirts", "shorts"] },
+        { before: "She wears red", after: "in summer.", answer: "shorts", options: ["shorts", "shirts", "shoes"] },
+      ]
+    },
+    {
+      id: 16, title: "Unit 16: At the campsite", emoji: "⛺",
+      phonicsLetter: { upper: "T", lower: "t" },
+      distractor: { word: "sun", vi: "mặt trời", emoji: "☀️" },
+      words: [
+        { word: "tent",    vi: "lều",       emoji: "⛺", missingIndex: 0, extraLetters: "txent".split(''), extraPos: 1 },
+        { word: "teapot",  vi: "ấm trà",    emoji: "🫖", missingIndex: 0, extraLetters: "teqapot".split(''), extraPos: 2 },
+        { word: "blanket", vi: "cái chăn",  emoji: "🛏️", missingIndex: 0, extraLetters: "blxanket".split(''), extraPos: 2 },
+      ],
+      story: {
+        text: "At the campsite, there is a tent, a teapot, and a blanket.",
+        question: "What is at the campsite?",
+        options: ["A tent, a teapot, and a blanket", "A kite and a bike", "A book and a pen"],
+        answerIndex: 0
+      },
+      sentenceTarget: "Is the blanket near the tent?",
+      fillSentences: [
+        { before: "We sleep in the", after: ".", answer: "tent", options: ["tent", "teapot", "blanket"] },
+        { before: "Mom pours tea from the", after: ".", answer: "teapot", options: ["teapot", "tent", "blanket"] },
+        { before: "I stay warm under the", after: ".", answer: "blanket", options: ["blanket", "tent", "teapot"] },
+      ]
+    }
+  ];
+  const PASS_THRESHOLD = 80;
+
+  // ================= PROGRESS (persisted per-viewer) =================
+  let progress = {};
+  try { const s = localStorage.getItem('unit_progress_v2'); if (s) progress = JSON.parse(s); } catch (e) {}
+  function saveProgress() { try { localStorage.setItem('unit_progress_v2', JSON.stringify(progress)); } catch (e) {} }
+  function getUP(unitId) {
+    if (!progress[unitId]) progress[unitId] = { unlockedStep: 0, stepResults: [], passed: false, bestScore: 0 };
+    return progress[unitId];
+  }
+  function stepPassed(result) {
+    if (!result || result.total === 0) return true;
+    return (result.correct / result.total) >= 0.8;
+  }
+  function isUnitUnlocked(unitId) {
+    if (unitId === 1) return true;
+    const prev = UNITS.find(u => u.id === unitId - 1);
+    return prev ? getUP(prev.id).passed : true;
+  }
+
+  // ================= UTIL =================
+  function speak(text) {
+    try {
+      if (!('speechSynthesis' in window)) return;
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'en-US'; u.rate = 0.85;
+      window.speechSynthesis.cancel(); window.speechSynthesis.speak(u);
+    } catch (e) {}
+  }
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+    return a;
+  }
+
+  // ================= NAV =================
+  let currentUnit = null;
+  let currentStepIndex = 0; // 0..7
+  let reviewMode = false;
+  const SCREENS = ['map', 'unit-detail', 'step-done', 'vocab', 'phonics-intro', 'step-player', 'result'];
+  function showScreen(name) {
+    SCREENS.forEach(s => document.getElementById('screen-' + s).classList.remove('active'));
+    document.getElementById('screen-' + name).classList.add('active');
+    document.getElementById('back-btn').style.display = (name === 'map') ? 'none' : 'inline-block';
+  }
+  document.getElementById('back-btn').addEventListener('click', () => {
+    const active = SCREENS.find(s => document.getElementById('screen-' + s).classList.contains('active'));
+    if (['unit-detail','result'].includes(active)) { renderMap(); showScreen('map'); }
+    else { renderUnitDetail(); showScreen('unit-detail'); }
+  });
+
+  // ================= UNIT MAP =================
+  function renderMap() {
+    document.getElementById('header-emoji').textContent = '🗺️';
+    document.getElementById('header-title').textContent = 'Lộ trình Tiếng Anh lớp 2';
+    document.getElementById('header-sub').textContent = 'Chọn Unit để bắt đầu học nhé!';
+    const list = document.getElementById('unit-list');
+    list.innerHTML = '';
+    UNITS.forEach(unit => {
+      const unlocked = isUnitUnlocked(unit.id);
+      const p = getUP(unit.id);
+      const tile = document.createElement('div');
+      tile.className = 'unit-tile' + (unlocked ? '' : ' locked');
+      let subHtml;
+      if (!unlocked) {
+        subHtml = '<div class="lock-note">Hoàn thành Unit ' + (unit.id - 1) + ' với ≥ ' + PASS_THRESHOLD + '% để mở khóa</div>';
+      } else if (p.passed) {
+        subHtml = '<span class="badge-pass">✅ Đã đạt ' + p.bestScore + '%</span>';
+      } else if (p.unlockedStep > 0) {
+        subHtml = '<span class="badge-progress">📖 ' + p.unlockedStep + '/8 bước</span>';
+      } else {
+        subHtml = '<div class="u-sub">Chưa bắt đầu</div>';
+      }
+      tile.innerHTML =
+        '<div class="unit-emoji">' + (unlocked ? unit.emoji : '🔒') + '</div>' +
+        '<div class="unit-info"><div class="u-name">' + unit.title + '</div>' + subHtml + '</div>' +
+        '<div class="u-status">' + (unlocked ? '›' : '') + '</div>';
+      if (unlocked) tile.addEventListener('click', () => { currentUnit = unit; renderUnitDetail(); showScreen('unit-detail'); });
+      list.appendChild(tile);
+    });
+  }
+
+  // ================= UNIT DETAIL (8-step checklist) =================
+  function renderUnitDetail() {
+    document.getElementById('header-emoji').textContent = currentUnit.emoji;
+    document.getElementById('header-title').textContent = currentUnit.title;
+    document.getElementById('header-sub').textContent = 'Hoàn thành lần lượt 8 bước bên dưới';
+    const up = getUP(currentUnit.id);
+    const list = document.getElementById('step-list');
+    list.innerHTML = '';
+    STEP_LABELS.forEach((label, i) => {
+      const done = i < up.unlockedStep;
+      const locked = i > up.unlockedStep;
+      const result = up.stepResults[i];
+      const passed = done && stepPassed(result);
+      const failed = done && !passed;
+      let icon = '▶️';
+      if (locked) icon = '🔒';
+      else if (passed) icon = '✅';
+      else if (failed) icon = '❌';
+      const tile = document.createElement('div');
+      tile.className = 'step-tile' + (locked ? ' locked' : '');
+      tile.innerHTML =
+        '<div class="step-num">' + (i + 1) + '</div>' +
+        '<div class="step-name">' + label + (failed ? ' <span style="color:var(--red); font-size:12px; font-weight:normal;">(chưa đạt, chạm để làm lại)</span>' : '') + '</div>' +
+        '<div class="step-check">' + icon + '</div>';
+      if (!locked) {
+        tile.addEventListener('click', () => { enterStep(i, done); });
+      }
+      list.appendChild(tile);
+    });
+  }
+
+  function enterStep(stepIndex, isDoneBefore) {
+    currentStepIndex = stepIndex;
+    const up = getUP(currentUnit.id);
+    const result = up.stepResults[stepIndex];
+    reviewMode = isDoneBefore && stepPassed(result); // đã đạt -> chỉ xem lại; chưa đạt -> tính điểm lại
+    const key = ['phonics','vocab','remove','fill','odd','reading','sentence','fillsentence'][stepIndex];
+    if (key === 'phonics') { startPhonicsIntro(); }
+    else if (key === 'vocab') { startVocabFlashcards(); }
+    else { startGenericStep(key); }
+  }
+
+  // ================= STEP COMPLETION =================
+  function completeStep(correct, total) {
+    const up = getUP(currentUnit.id);
+    if (!reviewMode) {
+      up.stepResults[currentStepIndex] = { correct: correct, total: total };
+      if (currentStepIndex === up.unlockedStep) up.unlockedStep = currentStepIndex + 1;
+      saveProgress();
+    }
+    if (!reviewMode && up.unlockedStep >= 8) {
+      finishUnit();
+    } else {
+      document.getElementById('step-done-title').textContent = reviewMode ? 'Đã xem lại xong!' : 'Hoàn thành bước ' + (currentStepIndex + 1) + '!';
+      document.getElementById('step-done-sub').textContent = reviewMode ? 'Bạn có thể quay lại danh sách bước.' : (total > 0 ? ('Đúng ' + correct + '/' + total + ' câu.') : '');
+      showScreen('step-done');
+    }
+  }
+  document.getElementById('step-done-continue').addEventListener('click', () => { renderUnitDetail(); showScreen('unit-detail'); });
+
+  function finishUnit() {
+    const up = getUP(currentUnit.id);
+    let totalCorrect = 0, totalQ = 0;
+    up.stepResults.forEach(r => { if (r) { totalCorrect += r.correct; totalQ += r.total; } });
+    const pct = totalQ > 0 ? Math.round((totalCorrect / totalQ) * 100) : 0;
+    if (pct > up.bestScore) up.bestScore = pct;
+    const passed = pct >= PASS_THRESHOLD;
+    if (passed) up.passed = true;
+    saveProgress();
+
+    document.getElementById('result-pct').textContent = pct + '%';
+    const circle = document.getElementById('score-circle');
+    circle.classList.remove('pass', 'fail'); circle.classList.add(passed ? 'pass' : 'fail');
+    document.getElementById('result-emoji').textContent = passed ? '🏆' : '💪';
+    document.getElementById('result-title').textContent = passed ? 'Xuất sắc!' : 'Cố gắng thêm nhé!';
+    const unlockMsg = document.getElementById('unlock-msg');
+    const nextUnit = UNITS.find(u => u.id === currentUnit.id + 1);
+    if (passed) {
+      unlockMsg.textContent = nextUnit ? '🎉 Bạn đã mở khóa ' + nextUnit.title + '!' : '🎉 Bạn đã hoàn thành mọi Unit hiện có!';
+      unlockMsg.className = 'unlock-msg pass';
+      document.getElementById('result-next').style.display = nextUnit ? 'inline-block' : 'none';
+    } else {
+      unlockMsg.textContent = 'Cần đạt tối thiểu ' + PASS_THRESHOLD + '% để mở Unit tiếp theo. Hãy học lại nhé!';
+      unlockMsg.className = 'unlock-msg fail';
+      document.getElementById('result-next').style.display = 'none';
+    }
+    showScreen('result');
+  }
+  document.getElementById('result-retry').addEventListener('click', () => {
+    const up = getUP(currentUnit.id);
+    up.unlockedStep = 0; up.stepResults = []; saveProgress();
+    renderUnitDetail(); showScreen('unit-detail');
+  });
+  document.getElementById('result-next').addEventListener('click', () => {
+    const nextUnit = UNITS.find(u => u.id === currentUnit.id + 1);
+    if (nextUnit) { currentUnit = nextUnit; renderUnitDetail(); showScreen('unit-detail'); }
+  });
+  document.getElementById('result-map').addEventListener('click', () => { renderMap(); showScreen('map'); });
+
+  // ================= STEP 1: PHONICS INTRO =================
+  function startPhonicsIntro() {
+    document.getElementById('phonics-letter-big').textContent = currentUnit.phonicsLetter.upper + currentUnit.phonicsLetter.lower;
+    const row = document.getElementById('phonics-word-row');
+    row.innerHTML = '';
+    currentUnit.words.forEach(w => {
+      const d = document.createElement('div');
+      d.style.textAlign = 'center';
+      d.style.cursor = 'pointer';
+      d.innerHTML = '<div style="font-size:40px;">' + w.emoji + '</div><div style="font-weight:bold; font-size:13px;">' + w.word + '</div><div style="font-size:16px;">🔊</div>';
+      d.addEventListener('click', () => speak(w.word));
+      row.appendChild(d);
+    });
+    showScreen('phonics-intro');
+  }
+  document.getElementById('phonics-speak-letter').addEventListener('click', () => {
+    speak(currentUnit.phonicsLetter.lower);
+  });
+  document.getElementById('phonics-continue').addEventListener('click', () => {
+    startGenericStep('phonics-check');
+  });
+
+  // ================= STEP 2: VOCAB FLASHCARDS =================
+  let fcIndex = 0;
+  function startVocabFlashcards() {
+    fcIndex = 0;
+    document.getElementById('fc-total').textContent = currentUnit.words.length;
+    renderFlashcard();
+    showScreen('vocab');
+  }
+  function renderFlashcard() {
+    const w = currentUnit.words[fcIndex];
+    document.getElementById('fc-emoji').textContent = w.emoji;
+    document.getElementById('fc-word').textContent = w.word;
+    document.getElementById('fc-vi').textContent = w.vi;
+    document.getElementById('fc-index').textContent = fcIndex + 1;
+    document.getElementById('flashcard').classList.remove('flipped');
+  }
+  document.getElementById('flashcard').addEventListener('click', () => document.getElementById('flashcard').classList.toggle('flipped'));
+  document.getElementById('fc-speak').addEventListener('click', (e) => { e.stopPropagation(); speak(currentUnit.words[fcIndex].word); });
+  document.getElementById('fc-prev').addEventListener('click', () => { fcIndex = (fcIndex - 1 + currentUnit.words.length) % currentUnit.words.length; renderFlashcard(); });
+  document.getElementById('fc-next').addEventListener('click', () => { fcIndex = (fcIndex + 1) % currentUnit.words.length; renderFlashcard(); });
+  document.getElementById('go-to-vocab-quiz').addEventListener('click', () => startGenericStep('vocab-quiz'));
+
+  // ================= GENERIC STEP PLAYER =================
+  let stepQueue = [];
+  let stepQIdx = 0;
+  let stepCorrect = 0;
+  let stepAnswered = false;
+
+  const STEP_TITLES = {
+    'phonics-check': '1. Phonics & Sounds — Câu hỏi',
+    'vocab-quiz': '2. Vocabulary — Câu hỏi',
+    'remove': '3. Remove Letter',
+    'fill': '4. Fill Missing',
+    'odd': '5. Odd One Out',
+    'reading': '6. Reading Stories',
+    'sentence': '7. Sentence Builder',
+    'fillsentence': '8. Fill Sentence'
+  };
+  // map generic key to the actual step index (0..7) for progress recording
+  const KEY_TO_STEPINDEX = { 'phonics-check': 0, 'vocab-quiz': 1, 'remove': 2, 'fill': 3, 'odd': 4, 'reading': 5, 'sentence': 6, 'fillsentence': 7 };
+
+  function startGenericStep(key) {
+    currentStepIndex = KEY_TO_STEPINDEX[key];
+    stepQIdx = 0; stepCorrect = 0;
+    stepQueue = buildQueue(key);
+    document.getElementById('sp-title').textContent = STEP_TITLES[key];
+    renderDots();
+    renderStepQuestion(key);
+    showScreen('step-player');
+  }
+
+  function buildQueue(key) {
+    const u = currentUnit;
+    if (key === 'phonics-check') {
+      const correctW = shuffle(u.words)[0];
+      return [{ type: 'mcq', emoji: correctW.emoji, question: 'Từ nào có chứa âm "' + u.phonicsLetter.lower + '"?', options: shuffle([correctW.word, u.distractor.word]), correct: correctW.word }];
+    }
+    if (key === 'vocab-quiz') {
+      return shuffle(u.words).map(w => ({ type: 'mcq', emoji: w.emoji, question: 'Đây là từ gì?', options: shuffle(u.words.map(x => x.word)), correct: w.word }));
+    }
+    if (key === 'remove') {
+      return shuffle(u.words).map(w => ({ type: 'remove', word: w }));
+    }
+    if (key === 'fill') {
+      return shuffle(u.words).map(w => ({ type: 'fill', word: w }));
+    }
+    if (key === 'odd') {
+      const oddItem = { emoji: u.distractor.emoji, label: u.distractor.word };
+      const items = shuffle(u.words.map(w => ({ emoji: w.emoji, label: w.word })).concat([oddItem]));
+      return [{ type: 'odd', items: items, correctLabel: oddItem.label }];
+    }
+    if (key === 'reading') {
+      return [{ type: 'mcq', story: u.story.text, question: u.story.question, options: shuffle(u.story.options), correct: u.story.options[u.story.answerIndex] }];
+    }
+    if (key === 'sentence') {
+      return [{ type: 'sentence', target: u.sentenceTarget }];
+    }
+    if (key === 'fillsentence') {
+      return u.fillSentences.map(fs => ({ type: 'mcq', sentence: fs.before + ' ____ ' + fs.after, question: 'Chọn từ đúng điền vào chỗ trống', options: shuffle(fs.options), correct: fs.answer }));
+    }
+    return [];
+  }
+
+  function renderDots() {
+    const el = document.getElementById('sp-dots');
+    el.innerHTML = '';
+    stepQueue.forEach((_, i) => {
+      const s = document.createElement('span');
+      if (i < stepQIdx) s.classList.add('done');
+      else if (i === stepQIdx) s.classList.add('current');
+      el.appendChild(s);
+    });
+  }
+
+  function hideAllBlocks() {
+    ['mcq','fill','remove','odd','sentence'].forEach(b => document.getElementById('block-' + b).style.display = 'none');
+  }
+
+  function renderStepQuestion() {
+    stepAnswered = false;
+    if (stepQIdx >= stepQueue.length) {
+      completeStep(stepCorrect, stepQueue.length);
+      return;
+    }
+    const q = stepQueue[stepQIdx];
+    hideAllBlocks();
+    renderDots();
+    if (q.type === 'mcq') renderMCQ(q);
+    else if (q.type === 'fill') renderFill(q);
+    else if (q.type === 'remove') renderRemove(q);
+    else if (q.type === 'odd') renderOdd(q);
+    else if (q.type === 'sentence') renderSentence(q);
+  }
+
+  function goNext(correct) {
+    if (correct) stepCorrect++;
+    const delay = correct ? 1400 : 2600;
+    setTimeout(() => { stepQIdx++; renderStepQuestion(); }, delay);
+  }
+
+  // ---- MCQ (dùng cho phonics-check, vocab-quiz, reading, fillsentence) ----
+  function renderMCQ(q) {
+    document.getElementById('block-mcq').style.display = 'block';
+    const emojiEl = document.getElementById('mcq-emoji');
+    const storyEl = document.getElementById('mcq-story');
+    const sentEl = document.getElementById('mcq-sentence');
+    emojiEl.style.display = q.emoji ? 'block' : 'none';
+    if (q.emoji) emojiEl.textContent = q.emoji;
+    storyEl.style.display = q.story ? 'block' : 'none';
+    if (q.story) storyEl.textContent = q.story;
+    const storySpeakBtn = document.getElementById('mcq-story-speak');
+    storySpeakBtn.style.display = q.story ? 'inline-block' : 'none';
+    storySpeakBtn.onclick = () => speak(q.story);
+
+    sentEl.style.display = q.sentence ? 'block' : 'none';
+    if (q.sentence) sentEl.textContent = q.sentence;
+    document.getElementById('mcq-question').textContent = q.question;
+    const questionSpeakBtn = document.getElementById('mcq-question-speak');
+    questionSpeakBtn.style.display = 'inline-block';
+    questionSpeakBtn.onclick = () => speak(q.sentence ? (q.sentence + '. ' + q.question) : q.question);
+
+    const listenHint = document.getElementById('mcq-listen-hint');
+    const listenedSet = new Set();
+    function updateListenHint() {
+      if (listenedSet.size >= q.options.length) {
+        listenHint.textContent = '✅ Giờ hãy chọn đáp án đúng nhé!';
+        listenHint.className = 'listen-hint all-done';
+      } else {
+        listenHint.textContent = '🎧 Hãy bấm 🔊 để nghe hết ' + q.options.length + ' đáp án trước khi chọn (' + listenedSet.size + '/' + q.options.length + ')';
+        listenHint.className = 'listen-hint';
+      }
+    }
+    updateListenHint();
+
+    const optionsEl = document.getElementById('mcq-options');
+    optionsEl.innerHTML = '';
+    q.options.forEach((opt, idx) => {
+      const btn = document.createElement('button');
+      btn.className = 'opt-btn opt-locked';
+      btn.style.display = 'flex';
+      btn.style.alignItems = 'center';
+      btn.style.justifyContent = 'center';
+      btn.style.gap = '10px';
+
+      const speakIcon = document.createElement('span');
+      speakIcon.textContent = '🔊';
+      speakIcon.className = 'opt-speak-icon';
+      speakIcon.title = 'Nghe thử';
+      speakIcon.addEventListener('click', (e) => {
+        e.stopPropagation();
+        speak(opt);
+        listenedSet.add(idx);
+        speakIcon.classList.add('heard');
+        updateListenHint();
+        if (listenedSet.size >= q.options.length) {
+          optionsEl.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('opt-locked'));
+        }
+      });
+
+      const label = document.createElement('span');
+      label.className = 'opt-label';
+      label.textContent = opt;
+
+      btn.appendChild(speakIcon);
+      btn.appendChild(label);
+
+      btn.addEventListener('click', () => {
+        if (stepAnswered) return;
+        if (listenedSet.size < q.options.length) return; // chưa nghe đủ, chưa cho chọn
+        stepAnswered = true;
+        const allBtns = optionsEl.querySelectorAll('.opt-btn');
+        allBtns.forEach(b => {
+          b.disabled = true;
+          b.classList.remove('opt-locked');
+          const bLabel = b.querySelector('span:last-child').textContent;
+          if (bLabel === q.correct) b.classList.add('correct');
+          if (b === btn && opt !== q.correct) b.classList.add('wrong');
+        });
+        const ok = (opt === q.correct);
+        if (q.sentence) {
+          const filledSentence = q.sentence.replace('____', q.correct);
+          sentEl.innerHTML = q.sentence.replace('____', '<span style="color:var(--green); text-decoration: underline;">' + q.correct + '</span>');
+          setTimeout(() => speak(filledSentence), 200);
+        }
+        goNext(ok);
+      });
+      optionsEl.appendChild(btn);
+    });
+  }
+
+  // ---- FILL MISSING ----
+  function renderFill(q) {
+    document.getElementById('block-fill').style.display = 'block';
+    document.getElementById('fill-emoji').textContent = q.word.emoji;
+    document.getElementById('fill-feedback').textContent = '';
+    document.getElementById('fill-feedback').className = 'feedback';
+    const wrap = document.getElementById('fill-word-wrap');
+    wrap.innerHTML = '';
+    q.word.word.split('').forEach((ch, i) => {
+      if (i === q.word.missingIndex) {
+        const input = document.createElement('input');
+        input.type = 'text'; input.maxLength = 1; input.id = 'fill-input'; input.autocomplete = 'off';
+        wrap.appendChild(input);
+      } else {
+        const span = document.createElement('span'); span.textContent = ch; wrap.appendChild(span);
+      }
+    });
+    setTimeout(() => { const inp = document.getElementById('fill-input'); if (inp) inp.focus(); }, 50);
+  }
+  document.getElementById('fill-check').addEventListener('click', () => {
+    if (stepAnswered) return;
+    const q = stepQueue[stepQIdx];
+    const inp = document.getElementById('fill-input');
+    if (!inp) return;
+    const val = (inp.value || '').trim().toLowerCase();
+    const correctLetter = q.word.word[q.word.missingIndex];
+    const fb = document.getElementById('fill-feedback');
+    const ok = (val === correctLetter);
+    stepAnswered = true;
+    if (ok) { fb.textContent = '✅ Chính xác! ' + q.word.word; fb.className = 'feedback ok'; speak(q.word.word); }
+    else { fb.textContent = '❌ Đáp án đúng là: ' + q.word.word; fb.className = 'feedback bad'; }
+    goNext(ok);
+  });
+
+  // ---- REMOVE LETTER ----
+  function renderRemove(q) {
+    document.getElementById('block-remove').style.display = 'block';
+    document.getElementById('remove-emoji').textContent = q.word.emoji;
+    document.getElementById('remove-feedback').textContent = '';
+    const row = document.getElementById('letters-row');
+    row.innerHTML = '';
+    q.word.extraLetters.forEach((ch, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'letter-btn';
+      btn.textContent = ch;
+      btn.addEventListener('click', () => {
+        if (stepAnswered) return;
+        stepAnswered = true;
+        const allBtns = row.querySelectorAll('.letter-btn');
+        allBtns.forEach(b => b.disabled = true);
+        const ok = (i === q.word.extraPos);
+        const fb = document.getElementById('remove-feedback');
+        if (ok) { btn.classList.add('removed-correct'); fb.textContent = '✅ Đúng rồi! Từ đúng là: ' + q.word.word; fb.className = 'feedback ok'; speak(q.word.word); }
+        else {
+          btn.classList.add('removed-wrong');
+          allBtns[q.word.extraPos].classList.add('removed-correct');
+          fb.textContent = '❌ Chữ thừa là "' + q.word.extraLetters[q.word.extraPos] + '". Từ đúng: ' + q.word.word;
+          fb.className = 'feedback bad';
+        }
+        goNext(ok);
+      });
+      row.appendChild(btn);
+    });
+  }
+
+  // ---- ODD ONE OUT ----
+  function renderOdd(q) {
+    document.getElementById('block-odd').style.display = 'block';
+    document.getElementById('odd-feedback').textContent = '';
+    const grid = document.getElementById('odd-grid');
+    grid.innerHTML = '';
+    q.items.forEach(item => {
+      const card = document.createElement('div');
+      card.className = 'odd-card';
+      card.innerHTML = '<div class="oc-emoji">' + item.emoji + '</div><div class="oc-label">' + item.label + '</div><div class="oc-speak" style="font-size:16px; cursor:pointer;">🔊</div>';
+      card.querySelector('.oc-speak').addEventListener('click', (e) => {
+        e.stopPropagation();
+        speak(item.label);
+      });
+      card.addEventListener('click', () => {
+        if (stepAnswered) return;
+        stepAnswered = true;
+        const allCards = grid.querySelectorAll('.odd-card');
+        const ok = (item.label === q.correctLabel);
+        allCards.forEach(c => {
+          const lbl = c.querySelector('.oc-label').textContent;
+          if (lbl === q.correctLabel) c.classList.add('correct');
+          if (c === card && !ok) c.classList.add('wrong');
+        });
+        const fb = document.getElementById('odd-feedback');
+        fb.textContent = ok ? '✅ Chính xác! "' + q.correctLabel + '" là từ khác nhóm.' : '❌ Từ khác nhóm là "' + q.correctLabel + '".';
+        fb.className = 'feedback ' + (ok ? 'ok' : 'bad');
+        goNext(ok);
+      });
+      grid.appendChild(card);
+    });
+  }
+
+  // ---- SENTENCE BUILDER ----
+  let sentenceTokens = [];   // [{id, text}]
+  let originalBankOrder = []; // fixed shuffled order of tokens
+  let placedIds = [];        // array of token ids currently placed, in placement order
+
+  function renderSentence(q) {
+    document.getElementById('block-sentence').style.display = 'block';
+    document.getElementById('sentence-feedback').textContent = '';
+    const words = q.target.split(' ');
+    sentenceTokens = words.map((w, i) => ({ id: i, text: w }));
+    originalBankOrder = shuffle(sentenceTokens.slice());
+    placedIds = [];
+    renderSentenceUI();
+  }
+
+  function renderSentenceUI() {
+    const answerArea = document.getElementById('sentence-answer-area');
+    const bank = document.getElementById('sentence-chip-bank');
+    answerArea.innerHTML = '';
+    bank.innerHTML = '';
+
+    placedIds.forEach((id) => {
+      const token = sentenceTokens.find(t => t.id === id);
+      const chip = document.createElement('button');
+      chip.className = 'word-chip placed';
+      chip.textContent = token.text;
+      chip.addEventListener('click', () => {
+        speak(token.text);
+        placedIds = placedIds.filter(pid => pid !== id);
+        renderSentenceUI();
+      });
+      answerArea.appendChild(chip);
+    });
+
+    originalBankOrder.forEach((token) => {
+      if (placedIds.includes(token.id)) return;
+      const chip = document.createElement('button');
+      chip.className = 'word-chip';
+      chip.textContent = token.text;
+      chip.addEventListener('click', () => {
+        speak(token.text);
+        placedIds.push(token.id);
+        renderSentenceUI();
+      });
+      bank.appendChild(chip);
+    });
+  }
+
+  document.getElementById('sentence-check').addEventListener('click', () => {
+    if (stepAnswered) return;
+    const q = stepQueue[stepQIdx];
+    const built = placedIds.map(id => sentenceTokens.find(t => t.id === id).text).join(' ');
+    const ok = (built === q.target);
+    stepAnswered = true;
+    const fb = document.getElementById('sentence-feedback');
+    if (ok) { fb.textContent = '✅ Chính xác!'; fb.className = 'feedback ok'; speak(q.target); }
+    else { fb.textContent = '❌ Câu đúng là: "' + q.target + '"'; fb.className = 'feedback bad'; }
+    goNext(ok);
+  });
+
+  // ================= HEADER ACTIONS + MODAL =================
+  function openModal(title, desc) {
+    document.getElementById('modal-title').textContent = title;
+    document.getElementById('modal-desc').textContent = desc;
+    document.getElementById('modal-overlay').classList.add('open');
+  }
+  function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); }
+
+  document.getElementById('ta-map').addEventListener('click', () => {
+    openModal('Bản đồ tuần / Tiến trình tuần', 'Đây là tính năng dành cho tài khoản Trial hoặc VIP. Con có thể Sign in nếu đã có tài khoản hoặc Sign up để đăng ký nhé!');
+  });
+  document.getElementById('ta-minigame').addEventListener('click', () => {
+    openModal('Mini Game', 'Kho Mini Game dành cho tài khoản Trial hoặc VIP. Con có thể Sign in nếu đã có tài khoản hoặc Sign up để đăng ký nhé!');
+  });
+  document.getElementById('ta-signin').addEventListener('click', () => {
+    openModal('Đăng nhập', 'Tính năng đăng nhập đang được xây dựng. Bạn quay lại sau nhé!');
+  });
+  document.getElementById('ta-signup').addEventListener('click', () => {
+    openModal('Đăng ký tài khoản', 'Tính năng đăng ký đang được xây dựng. Bạn quay lại sau nhé!');
+  });
+  document.getElementById('modal-later').addEventListener('click', closeModal);
+  document.getElementById('modal-overlay').addEventListener('click', (e) => {
+    if (e.target.id === 'modal-overlay') closeModal();
+  });
+
+  // ================= INIT =================
+  renderMap();
+  showScreen('map');
+})();
+</script>
+</body>
+</html>
