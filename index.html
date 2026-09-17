@@ -4,37 +4,86 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lộ trình học Tiếng Anh lớp 2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #fff8e7; --card-bg: #ffffff; --text: #3a2e1f; --text-soft: #7a6a52;
-    --primary: #ff9800; --primary-dark: #e67e00; --pink: #ff6f91; --green: #4caf50;
-    --red: #e74c3c; --blue: #3498db; --purple: #9b59b6; --border: #ffe0a3; --shadow: rgba(0,0,0,0.08);
+    --bg: #fff6e6;
+    --card-bg: #ffffff;
+    --text: #2b2116;
+    --text-soft: #8a7654;
+    --primary: #ffab00;
+    --primary-dark: #e08600;
+    --honey-light: #ffd873;
+    --coral: #ff6f59;
+    --coral-dark: #e04f3d;
+    --pink: #ff6f91;
+    --green: #2ec4b6;
+    --green-dark: #1a9e92;
+    --red: #ef476f;
+    --blue: #3da9fc;
+    --purple: #9b5de5;
+    --border: #ffe1a8;
+    --shadow: rgba(120,80,10,0.14);
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-      --bg:#241c12; --card-bg:#362a1a; --text:#fdf1de; --text-soft:#cbb894; --border:#55411f; --shadow:rgba(0,0,0,0.35);
+      --bg: #241c12;
+      --card-bg: #362a1a;
+      --text: #fdf1de;
+      --text-soft: #cbb894;
+      --border: #55411f;
+      --shadow: rgba(0,0,0,0.35);
     }
   }
-  :root[data-theme="dark"] { --bg:#241c12; --card-bg:#362a1a; --text:#fdf1de; --text-soft:#cbb894; --border:#55411f; --shadow:rgba(0,0,0,0.35); }
+  :root[data-theme="dark"] {
+    --bg: #241c12;
+    --card-bg: #362a1a;
+    --text: #fdf1de;
+    --text-soft: #cbb894;
+    --border: #55411f;
+    --shadow: rgba(0,0,0,0.35);
+  }
  
   * { box-sizing: border-box; }
   body {
-    margin: 0; background: var(--bg); color: var(--text);
-    font-family: 'Comic Sans MS', 'Baloo 2', system-ui, -apple-system, 'Segoe UI', sans-serif;
-    min-height: 100vh; padding: 16px;
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Nunito', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    padding: 16px;
+  }
+  h1, h2, h3, .step-num, .fc-word, .word-en, button {
+    font-family: 'Fredoka', 'Nunito', sans-serif;
   }
   .app { max-width: 720px; margin: 0 auto; }
  
   header.top {
-    background: linear-gradient(135deg, #ffd54f, #ff9800);
-    border-radius: 24px; padding: 18px 20px; display: flex; align-items: center; justify-content: space-between;
-    box-shadow: 0 4px 14px var(--shadow); flex-wrap: wrap; gap: 10px; color: #4a2c00;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #ffd873 0%, #ffab00 55%, #ff8a3d 100%);
+    background-image:
+      linear-gradient(135deg, #ffd873 0%, #ffab00 55%, #ff8a3d 100%),
+      repeating-linear-gradient(60deg, rgba(255,255,255,0.10) 0 2px, transparent 2px 26px),
+      repeating-linear-gradient(-60deg, rgba(255,255,255,0.10) 0 2px, transparent 2px 26px),
+      repeating-linear-gradient(0deg, rgba(255,255,255,0.10) 0 2px, transparent 2px 26px);
+    border-radius: 26px;
+    padding: 20px 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 8px 0 var(--primary-dark), 0 10px 20px var(--shadow);
+    flex-wrap: wrap;
+    gap: 10px;
+    color: #4a2c00;
   }
-  header.top .title-block { display:flex; align-items:center; gap:10px; }
-  header.top .emoji { font-size: 36px; }
-  header.top h1 { font-size: 17px; margin: 0; line-height:1.3; }
-  header.top p { margin: 2px 0 0; font-size: 12px; opacity: 0.85; }
-  .back-btn { background: rgba(255,255,255,0.5); border:none; border-radius:12px; padding:8px 12px; font-weight:bold; cursor:pointer; color:#4a2c00; font-size:14px; }
+  header.top .title-block { display:flex; align-items:center; gap:10px; position:relative; z-index:1; }
+  header.top .emoji { font-size: 40px; filter: drop-shadow(0 3px 0 rgba(0,0,0,0.12)); }
+  header.top h1 { font-size: 18px; margin: 0; line-height:1.3; font-weight:700; }
+  header.top p { margin: 3px 0 0; font-size: 12.5px; opacity: 0.8; font-weight:600; }
+  .back-btn { background: rgba(255,255,255,0.55); border:none; border-radius:14px; padding:9px 14px; font-weight:700; cursor:pointer; color:#4a2c00; font-size:14px; position:relative; z-index:1; }
  
   .top-actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
   .ta-btn {
@@ -65,7 +114,7 @@
   .modal-box h3 { color: var(--primary-dark); font-size: 19px; margin: 0 0 12px; }
   .modal-box p { font-size: 14px; color: var(--text); line-height:1.6; margin: 6px 0; }
   .modal-note {
-    background: #d4f7dc; color:#1c6b2a; border-radius:14px; padding:10px 14px; font-size:13px;
+    background: #d3f7f0; color:#0f7a67; border-radius:14px; padding:10px 14px; font-size:13px;
     margin: 14px 0; font-weight: bold;
   }
   .modal-btn { width:100%; border:none; border-radius:16px; padding:13px; font-weight:bold; font-size:15px; cursor:pointer; margin-bottom:10px; }
@@ -77,39 +126,74 @@
   .screen.active { display: block; }
  
   /* ===== UNIT MAP ===== */
-  .unit-list { display: flex; flex-direction: column; gap: 12px; margin-top: 18px; }
-  .unit-tile {
-    background: var(--card-bg); border-radius: 18px; padding: 16px; display: flex; align-items: center; gap: 14px;
-    box-shadow: 0 4px 12px var(--shadow); border: 2px solid var(--border); cursor: pointer; transition: transform 0.12s ease;
+  .unit-list { position: relative; display: flex; flex-direction: column; gap: 22px; margin-top: 26px; padding-left: 8px; }
+  .unit-list::before {
+    content: '';
+    position: absolute;
+    left: 34px; top: 10px; bottom: 10px; width: 4px;
+    background-image: linear-gradient(var(--honey-light) 60%, transparent 0%);
+    background-size: 4px 14px;
+    background-repeat: repeat-y;
+    border-radius: 4px;
+    z-index: 0;
   }
-  .unit-tile:active { transform: scale(0.98); }
-  .unit-tile.locked { opacity: 0.6; cursor: default; filter: grayscale(0.3); }
-  .unit-tile .unit-emoji { font-size: 40px; flex-shrink:0; }
-  .unit-tile .unit-info { flex: 1; }
-  .unit-tile .unit-info .u-name { font-weight:bold; font-size: 16px; }
-  .unit-tile .unit-info .u-sub { font-size: 12px; color: var(--text-soft); margin-top:2px; }
-  .unit-tile .u-status { font-size: 22px; }
-  .badge-pass { background:#d4f7dc; color:#1c6b2a; font-size:11px; font-weight:bold; padding:3px 8px; border-radius:10px; display:inline-block; margin-top:4px; }
-  .badge-progress { background:#fff3d0; color:#8a6100; font-size:11px; font-weight:bold; padding:3px 8px; border-radius:10px; display:inline-block; margin-top:4px; }
-  .lock-note { font-size: 11px; color: var(--text-soft); margin-top:4px; font-style: italic; }
+  .unit-tile {
+    position: relative; z-index: 1;
+    background: var(--card-bg);
+    border-radius: 18px;
+    padding: 14px 16px 14px 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 5px 0 var(--border), 0 8px 16px var(--shadow);
+    border: none;
+    cursor: pointer;
+    transition: transform 0.12s ease;
+  }
+  .unit-tile:active { transform: translateY(3px); box-shadow: 0 2px 0 var(--border); }
+  .unit-tile.locked { opacity: 0.65; cursor: default; filter: grayscale(0.35); box-shadow: 0 5px 0 var(--border); }
+  .unit-tile .hex-badge {
+    flex-shrink: 0;
+    width: 60px; height: 66px;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    background: linear-gradient(160deg, var(--honey-light), var(--primary));
+    display: flex; align-items:center; justify-content:center;
+    font-size: 28px;
+    box-shadow: inset 0 -4px 0 rgba(0,0,0,0.12);
+  }
+  .unit-tile.locked .hex-badge { background: linear-gradient(160deg, #d9cfc0, #b7ab97); }
+  .unit-tile.passed .hex-badge { background: linear-gradient(160deg, #7fe9dc, var(--green)); }
+  .unit-tile .unit-info { flex: 1; padding-left: 10px; }
+  .unit-tile .unit-info .u-name { font-weight:700; font-size: 15.5px; font-family:'Fredoka',sans-serif; }
+  .unit-tile .unit-info .u-sub { font-size: 12px; color: var(--text-soft); margin-top:2px; font-weight:600; }
+  .unit-tile .u-status { font-size: 22px; color: var(--primary-dark); flex-shrink:0; }
+  .badge-pass {
+    background: #d7f9ef; color:#0f7a67; font-size:11px; font-weight:800;
+    padding: 3px 9px; border-radius: 10px; display:inline-block; margin-top:4px;
+  }
+  .badge-progress { background: #fff0cf; color:#8a5a00; font-size:11px; font-weight:800; padding: 3px 9px; border-radius: 10px; display:inline-block; margin-top:4px; }
+  .lock-note { font-size: 11px; color: var(--text-soft); margin-top:4px; font-style: italic; font-weight:600; }
  
   /* ===== UNIT DETAIL (8 step list) ===== */
-  .step-list { display:flex; flex-direction:column; gap: 8px; margin-top: 16px; }
+  .step-list { display:flex; flex-direction:column; gap: 10px; margin-top: 18px; padding-left: 4px; }
   .step-tile {
-    background: var(--card-bg); border-radius: 14px; padding: 12px 14px; display:flex; align-items:center; gap: 12px;
-    border: 2px solid var(--border); box-shadow: 0 3px 8px var(--shadow); cursor: pointer;
+    background: var(--card-bg); border-radius: 16px; padding: 12px 14px; display:flex; align-items:center; gap: 12px;
+    border: none; box-shadow: 0 4px 0 var(--border), 0 6px 12px var(--shadow); cursor: pointer;
+    transition: transform 0.1s ease;
   }
-  .step-tile.locked { opacity: 0.5; cursor: default; }
+  .step-tile:active { transform: translateY(2px); box-shadow: 0 2px 0 var(--border); }
+  .step-tile.locked { opacity: 0.55; cursor: default; box-shadow: 0 4px 0 var(--border); }
   .step-tile .step-num {
-    width:30px; height:30px; border-radius:50%; background:var(--primary); color:white;
-    display:flex; align-items:center; justify-content:center; font-weight:bold; flex-shrink:0; font-size: 13px;
+    width:34px; height:34px; border-radius:50%; background: linear-gradient(160deg, var(--honey-light), var(--primary)); color:white;
+    display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0; font-size: 14px;
+    font-family:'Fredoka',sans-serif; box-shadow: inset 0 -3px 0 rgba(0,0,0,0.15);
   }
-  .step-tile.locked .step-num { background: var(--text-soft); }
-  .step-tile .step-name { font-weight:bold; flex:1; font-size: 14px; }
+  .step-tile.locked .step-num { background: linear-gradient(160deg, #d9cfc0, #b7ab97); }
+  .step-tile .step-name { font-weight:700; flex:1; font-size: 14px; }
   .step-tile .step-check { font-size:18px; }
  
-  .card { background: var(--card-bg); border-radius: 20px; padding: 20px; box-shadow: 0 4px 14px var(--shadow); margin-top: 16px; }
-  .instructions { font-size: 13px; color: var(--text-soft); text-align:center; margin-bottom: 10px; }
+  .card { background: var(--card-bg); border-radius: 22px; padding: 20px; box-shadow: 0 6px 18px var(--shadow); margin-top: 16px; border: 1px solid var(--border); }
+  .instructions { font-size: 13px; color: var(--text-soft); text-align:center; margin-bottom: 10px; font-weight:600; }
  
   /* ===== Flashcards ===== */
   .flash-wrap { display:flex; flex-direction: column; align-items: center; gap: 14px; }
@@ -132,7 +216,7 @@
   .speak-btn:active { transform: translateY(3px); box-shadow:none; }
   .primary-btn { margin-top: 10px; background: var(--pink); color:white; border:none; padding:12px 22px; border-radius:16px; font-weight:bold; cursor:pointer; box-shadow: 0 3px 0 #c2485f; font-size:15px; }
   .primary-btn:active { transform: translateY(3px); box-shadow:none; }
-  .primary-btn.green { background: var(--green); box-shadow: 0 3px 0 #2e7d32; }
+  .primary-btn.green { background: var(--green); box-shadow: 0 3px 0 var(--green-dark); }
   .primary-btn.purple { background: var(--purple); box-shadow: 0 3px 0 #6c3483; }
  
   /* ===== progress dots ===== */
@@ -150,19 +234,30 @@
   .mcq-prompt .emoji-big { font-size: 84px; }
   .mcq-prompt .sentence-display { font-size: 18px; font-weight:bold; margin: 10px 0; line-height:1.5; }
   .mcq-prompt .story-text { font-size: 15px; line-height:1.6; background: var(--bg); border-radius:12px; padding:12px; margin-bottom:10px; text-align:left; }
-  .options { display:flex; flex-direction:column; gap:10px; margin-top: 14px; }
-  .opt-btn { background: var(--card-bg); border: 2px solid var(--border); border-radius: 14px; padding: 12px; font-size: 17px; font-weight: bold; cursor: pointer; color: var(--text); }
-  .opt-btn.correct { background: #d4f7dc; border-color: var(--green); color:#1c6b2a; }
-  .opt-btn.wrong { background: #fbdcdc; border-color: var(--red); color:#a12727; }
+  .options { display:flex; flex-direction:column; gap:12px; margin-top: 14px; }
+  .opt-btn {
+    background: linear-gradient(135deg, #fff, var(--opt-tint, #fff8e7));
+    border: none; border-radius: 18px; padding: 16px 18px; font-size: 20px; font-weight: 800;
+    cursor: pointer; color: var(--text); font-family:'Fredoka',sans-serif;
+    box-shadow: 0 4px 0 var(--opt-shadow, var(--border)), 0 6px 10px var(--shadow);
+    transition: transform 0.1s ease;
+  }
+  .opt-btn:active:not([disabled]) { transform: translateY(3px); box-shadow: 0 1px 0 var(--opt-shadow, var(--border)); }
+  .opt-btn.opt-c0 { --opt-tint: #fff0c2; --opt-shadow: #f0c463; }
+  .opt-btn.opt-c1 { --opt-tint: #ffe0d6; --opt-shadow: #f2a48f; }
+  .opt-btn.opt-c2 { --opt-tint: #d3f7f0; --opt-shadow: #7fdbc9; }
+  .opt-btn.opt-c3 { --opt-tint: #dbe9ff; --opt-shadow: #93b8f2; }
+  .opt-btn.correct { background: linear-gradient(135deg,#fff,#d3f7f0); box-shadow: 0 4px 0 var(--green-dark), 0 6px 10px var(--shadow); color:#0f7a67; }
+  .opt-btn.wrong { background: linear-gradient(135deg,#fff,#fbdcdc); box-shadow: 0 4px 0 #c94d68, 0 6px 10px var(--shadow); color:#a12742; }
   .opt-btn[disabled] { cursor: default; }
   .opt-btn.opt-locked { cursor: not-allowed; }
   .opt-btn.opt-locked .opt-label { opacity: 0.45; }
   .opt-speak-icon {
     display: inline-flex; align-items:center; justify-content:center;
-    width: 32px; height: 32px; border-radius: 50%; background: var(--blue); color: white;
-    font-size: 14px; cursor: pointer; flex-shrink: 0;
+    width: 38px; height: 38px; border-radius: 50%; background: var(--blue); color: white;
+    font-size: 16px; cursor: pointer; flex-shrink: 0; box-shadow: 0 2px 0 #2678a8;
   }
-  .opt-speak-icon.heard { background: var(--green); }
+  .opt-speak-icon.heard { background: var(--green); box-shadow: 0 2px 0 var(--green-dark); }
   .listen-hint { text-align:center; font-size: 13px; color: var(--primary-dark); font-weight:bold; margin-bottom: 10px; }
   .listen-hint.all-done { color: var(--green); }
  
@@ -171,7 +266,7 @@
   .fill-item .emoji-big { font-size: 76px; }
   .fill-word { font-size: 32px; font-weight:bold; letter-spacing: 3px; margin: 12px 0; color: var(--primary-dark); }
   .fill-word input { width: 44px; height: 52px; font-size: 28px; text-align:center; font-weight:bold; border: 3px solid var(--primary); border-radius: 10px; margin: 0 2px; text-transform: lowercase; background: var(--card-bg); color: var(--text); }
-  .check-btn { background: var(--green); color:white; border:none; padding: 10px 24px; border-radius:16px; font-weight:bold; font-size:16px; cursor:pointer; box-shadow: 0 3px 0 #2e7d32; }
+  .check-btn { background: var(--green); color:white; border:none; padding: 10px 24px; border-radius:16px; font-weight:bold; font-size:16px; cursor:pointer; box-shadow: 0 3px 0 var(--green-dark); }
   .check-btn:active { transform: translateY(3px); box-shadow:none; }
   .feedback { margin-top:10px; font-weight:bold; font-size:15px; min-height: 22px; text-align:center; }
   .feedback.ok { color: var(--green); }
@@ -185,7 +280,7 @@
     width: 42px; height:50px; font-size: 24px; font-weight:bold; border-radius:10px;
     border: 2px solid var(--border); background: var(--card-bg); color: var(--text); cursor:pointer;
   }
-  .letter-btn.removed-correct { background:#d4f7dc; border-color: var(--green); }
+  .letter-btn.removed-correct { background:#d3f7f0; border-color: var(--green); }
   .letter-btn.removed-wrong { background:#fbdcdc; border-color: var(--red); }
   .letter-btn[disabled] { cursor:default; }
  
@@ -197,7 +292,7 @@
   }
   .odd-card .oc-emoji { font-size: 50px; }
   .odd-card .oc-label { font-weight:bold; margin-top:4px; font-size:14px; }
-  .odd-card.correct { border-color: var(--green); background:#d4f7dc; }
+  .odd-card.correct { border-color: var(--green); background:#d3f7f0; }
   .odd-card.wrong { border-color: var(--red); background:#fbdcdc; }
  
   /* ===== Sentence builder ===== */
@@ -235,23 +330,26 @@
     min-height: 80vh; display:flex; align-items:center; justify-content:center; padding: 16px;
   }
   .login-box {
-    background: var(--card-bg); border-radius: 24px; padding: 32px 26px; max-width: 360px; width:100%;
-    text-align:center; box-shadow: 0 6px 20px var(--shadow); border: 2px solid var(--border);
+    background: var(--card-bg); border-radius: 26px; padding: 34px 26px; max-width: 360px; width:100%;
+    text-align:center; box-shadow: 0 8px 0 var(--border), 0 12px 24px var(--shadow); border: none;
   }
-  .login-box .login-emoji { font-size: 56px; margin-bottom: 8px; }
-  .login-box h2 { color: var(--primary-dark); margin: 0 0 6px; font-size: 20px; }
-  .login-box p { color: var(--text-soft); font-size: 13px; margin: 0 0 20px; }
+  .login-box .login-emoji { font-size: 58px; margin-bottom: 8px; filter: drop-shadow(0 3px 0 rgba(0,0,0,0.1)); }
+  .login-box h2 { color: var(--primary-dark); margin: 0 0 6px; font-size: 21px; font-weight:700; }
+  .login-box p { color: var(--text-soft); font-size: 13px; margin: 0 0 20px; font-weight:600; }
   .login-field { text-align:left; margin-bottom: 14px; }
-  .login-field label { display:block; font-size: 13px; font-weight:bold; color: var(--text); margin-bottom: 5px; }
+  .login-field label { display:block; font-size: 13px; font-weight:700; color: var(--text); margin-bottom: 5px; }
   .login-field input {
     width:100%; padding: 11px 14px; border-radius: 12px; border: 2px solid var(--border);
-    font-size: 15px; background: var(--bg); color: var(--text); box-sizing:border-box;
+    font-size: 15px; background: var(--bg); color: var(--text); box-sizing:border-box; font-family:'Nunito',sans-serif;
   }
+  .login-field input:focus { outline: none; border-color: var(--primary); }
   .login-submit {
-    width:100%; background: linear-gradient(135deg,#ffb74d,#ff9800); color:white; border:none;
-    border-radius:14px; padding:13px; font-weight:bold; font-size:15px; cursor:pointer; margin-top:6px;
+    width:100%; background: linear-gradient(135deg, var(--honey-light), var(--primary)); color:#4a2c00; border:none;
+    border-radius:14px; padding:13px; font-weight:700; font-size:15px; cursor:pointer; margin-top:6px;
+    box-shadow: 0 4px 0 var(--primary-dark); font-family:'Fredoka',sans-serif;
   }
-  .login-error { color: var(--red); font-size: 13px; font-weight:bold; margin-top: 10px; min-height:18px; }
+  .login-submit:active { transform: translateY(3px); box-shadow:none; }
+  .login-error { color: var(--red); font-size: 13px; font-weight:700; margin-top: 10px; min-height:18px; }
 </style>
 </head>
 <body>
@@ -390,21 +488,6 @@
     </div>
   </div>
  
-  <!-- SCREEN: EXAM RESULT (bài kiểm tra Unit - bước 9) -->
-  <div class="screen" id="screen-exam-result">
-    <div class="card result-screen">
-      <div class="big-emoji" id="exam-result-emoji">🏆</div>
-      <h2 id="exam-result-title">Hoàn thành!</h2>
-      <div class="score-circle" id="exam-score-circle">
-        <div class="pct" id="exam-result-pct">0%</div>
-        <div class="lbl">chính xác</div>
-      </div>
-      <p id="exam-result-detail" style="color:var(--text-soft); font-size:14px; margin-bottom:14px;"></p>
-      <button class="primary-btn" id="exam-retry">🔁 Làm lại bài kiểm tra</button>
-      <button class="primary-btn purple" id="exam-back">📋 Về danh sách bước</button>
-    </div>
-  </div>
- 
   <!-- SCREEN: RESULT -->
   <div class="screen" id="screen-result">
     <div class="card result-screen">
@@ -415,7 +498,7 @@
         <div class="lbl">chính xác</div>
       </div>
       <div class="unlock-msg" id="unlock-msg"></div>
-      <button class="primary-btn" id="result-retry">🔁 Học lại toàn bộ Unit</button>
+      <button class="primary-btn" id="result-retry">🔁 Làm lại bài kiểm tra</button>
       <button class="primary-btn green" id="result-next" style="display:none;">➡️ Sang Unit tiếp theo</button>
       <button class="primary-btn purple" id="result-map">🗺️ Về bản đồ Unit</button>
     </div>
@@ -821,15 +904,27 @@
  
   // ================= PROGRESS (persisted per-viewer) =================
   let progress = {};
-  try { const s = localStorage.getItem('unit_progress_v2'); if (s) progress = JSON.parse(s); } catch (e) {}
-  function saveProgress() { try { localStorage.setItem('unit_progress_v2', JSON.stringify(progress)); } catch (e) {} }
+  try { const s = localStorage.getItem('unit_progress_v3'); if (s) progress = JSON.parse(s); } catch (e) {}
+  function saveProgress() { try { localStorage.setItem('unit_progress_v3', JSON.stringify(progress)); } catch (e) {} }
   function getUP(unitId) {
-    if (!progress[unitId]) progress[unitId] = { unlockedStep: 0, stepResults: [], passed: false, bestScore: 0 };
+    if (!progress[unitId]) progress[unitId] = { stepResults: [], passed: false, bestScore: 0 };
     return progress[unitId];
   }
   function stepPassed(result) {
     if (!result || result.total === 0) return true;
     return (result.correct / result.total) >= 0.8;
+  }
+  function allEightStepsPassed(up) {
+    for (let i = 0; i < 8; i++) {
+      const r = up.stepResults[i];
+      if (!r || !stepPassed(r)) return false;
+    }
+    return true;
+  }
+  function countPassedSteps(up) {
+    let n = 0;
+    for (let i = 0; i < 8; i++) { if (stepPassed(up.stepResults[i])) n++; }
+    return n;
   }
   function isUnitUnlocked(unitId) {
     if (unitId === 1) return true;
@@ -856,7 +951,7 @@
   let currentUnit = null;
   let currentStepIndex = 0; // 0..7
   let reviewMode = false;
-  const SCREENS = ['map', 'unit-detail', 'step-done', 'vocab', 'phonics-intro', 'step-player', 'result', 'exam-result'];
+  const SCREENS = ['map', 'unit-detail', 'step-done', 'vocab', 'phonics-intro', 'step-player', 'result'];
   function showScreen(name) {
     SCREENS.forEach(s => document.getElementById('screen-' + s).classList.remove('active'));
     document.getElementById('screen-' + name).classList.add('active');
@@ -865,7 +960,6 @@
   document.getElementById('back-btn').addEventListener('click', () => {
     const active = SCREENS.find(s => document.getElementById('screen-' + s).classList.contains('active'));
     if (['unit-detail','result'].includes(active)) { renderMap(); showScreen('map'); }
-    else if (active === 'exam-result') { renderUnitDetail(); showScreen('unit-detail'); }
     else { renderUnitDetail(); showScreen('unit-detail'); }
   });
  
@@ -880,19 +974,19 @@
       const unlocked = isUnitUnlocked(unit.id);
       const p = getUP(unit.id);
       const tile = document.createElement('div');
-      tile.className = 'unit-tile' + (unlocked ? '' : ' locked');
+      tile.className = 'unit-tile' + (unlocked ? '' : ' locked') + (p.passed ? ' passed' : '');
       let subHtml;
       if (!unlocked) {
         subHtml = '<div class="lock-note">Hoàn thành Unit ' + (unit.id - 1) + ' với ≥ ' + PASS_THRESHOLD + '% để mở khóa</div>';
       } else if (p.passed) {
         subHtml = '<span class="badge-pass">✅ Đã đạt ' + p.bestScore + '%</span>';
-      } else if (p.unlockedStep > 0) {
-        subHtml = '<span class="badge-progress">📖 ' + p.unlockedStep + '/8 bước</span>';
+      } else if (countPassedSteps(p) > 0) {
+        subHtml = '<span class="badge-progress">📖 ' + countPassedSteps(p) + '/8 bước đạt</span>';
       } else {
         subHtml = '<div class="u-sub">Chưa bắt đầu</div>';
       }
       tile.innerHTML =
-        '<div class="unit-emoji">' + (unlocked ? unit.emoji : '🔒') + '</div>' +
+        '<div class="hex-badge">' + (unlocked ? unit.emoji : '🔒') + '</div>' +
         '<div class="unit-info"><div class="u-name">' + unit.title + '</div>' + subHtml + '</div>' +
         '<div class="u-status">' + (unlocked ? '›' : '') + '</div>';
       if (unlocked) tile.addEventListener('click', () => { currentUnit = unit; renderUnitDetail(); showScreen('unit-detail'); });
@@ -904,31 +998,33 @@
   function renderUnitDetail() {
     document.getElementById('header-emoji').textContent = currentUnit.emoji;
     document.getElementById('header-title').textContent = currentUnit.title;
-    document.getElementById('header-sub').textContent = 'Hoàn thành lần lượt 8 bước bên dưới';
+    document.getElementById('header-sub').textContent = 'Làm 8 bước theo thứ tự tuỳ ý, đạt hết mới mở bài kiểm tra';
     const up = getUP(currentUnit.id);
+    const eightDone = allEightStepsPassed(up);
     const list = document.getElementById('step-list');
     list.innerHTML = '';
     STEP_LABELS.forEach((label, i) => {
-      const locked = i > up.unlockedStep;
-      let icon, extraLabel = '';
+      let icon, extraLabel = '', locked = false;
       if (i === 8) {
-        // Bước 9: bài kiểm tra tổng hợp — không tính vào khóa/mở Unit, có thể làm lại nhiều lần
-        if (locked) { icon = '🔒'; }
-        else if (up.examResult) {
+        // Bước 9: bài kiểm tra tổng hợp — chỉ mở khi đủ 8 bước đã đạt ≥80%
+        locked = !eightDone;
+        if (locked) {
+          icon = '🔒';
+          extraLabel = ' <span style="color:var(--text-soft); font-size:12px; font-weight:normal;">(hoàn thành cả 8 bước ≥80% để mở)</span>';
+        } else if (up.examResult) {
           const pct = Math.round((up.examResult.correct / up.examResult.total) * 100);
           icon = '✅';
-          extraLabel = ' <span style="color:var(--green); font-size:12px; font-weight:normal;">(Điểm: ' + up.examResult.correct + '/' + up.examResult.total + ' - ' + pct + '%, chạm để làm lại)</span>';
+          extraLabel = ' <span style="color:var(--green-dark); font-size:12px; font-weight:normal;">(Điểm: ' + up.examResult.correct + '/' + up.examResult.total + ' - ' + pct + '%, chạm để làm lại)</span>';
         } else {
           icon = '🏆';
         }
       } else {
-        const done = i < up.unlockedStep;
         const result = up.stepResults[i];
+        const done = !!result;
         const passed = done && stepPassed(result);
         const failed = done && !passed;
         icon = '▶️';
-        if (locked) icon = '🔒';
-        else if (passed) icon = '✅';
+        if (passed) icon = '✅';
         else if (failed) { icon = '❌'; extraLabel = ' <span style="color:var(--red); font-size:12px; font-weight:normal;">(chưa đạt, chạm để làm lại)</span>'; }
       }
       const tile = document.createElement('div');
@@ -938,13 +1034,13 @@
         '<div class="step-name">' + label + extraLabel + '</div>' +
         '<div class="step-check">' + icon + '</div>';
       if (!locked) {
-        tile.addEventListener('click', () => { enterStep(i, i < up.unlockedStep); });
+        tile.addEventListener('click', () => { enterStep(i); });
       }
       list.appendChild(tile);
     });
   }
  
-  function enterStep(stepIndex, isDoneBefore) {
+  function enterStep(stepIndex) {
     currentStepIndex = stepIndex;
     if (stepIndex === 8) {
       reviewMode = false; // bài kiểm tra tổng hợp luôn tính điểm mới mỗi lần làm
@@ -953,7 +1049,7 @@
     }
     const up = getUP(currentUnit.id);
     const result = up.stepResults[stepIndex];
-    reviewMode = isDoneBefore && stepPassed(result); // đã đạt -> chỉ xem lại; chưa đạt -> tính điểm lại
+    reviewMode = !!result && stepPassed(result); // đã đạt -> chỉ xem lại; chưa đạt/chưa làm -> tính điểm
     const key = ['phonics','vocab','remove','fill','odd','reading','sentence','fillsentence'][stepIndex];
     if (key === 'phonics') { startPhonicsIntro(); }
     else if (key === 'vocab') { startVocabFlashcards(); }
@@ -964,43 +1060,23 @@
   function completeStep(correct, total) {
     const up = getUP(currentUnit.id);
     if (currentStepIndex === 8) {
-      up.examResult = { correct: correct, total: total };
-      saveProgress();
-      showExamResult(correct, total);
+      finishUnit(correct, total);
       return;
     }
     if (!reviewMode) {
       up.stepResults[currentStepIndex] = { correct: correct, total: total };
-      if (currentStepIndex === up.unlockedStep) up.unlockedStep = currentStepIndex + 1;
       saveProgress();
     }
-    if (!reviewMode && up.unlockedStep >= 8) {
-      finishUnit();
-    } else {
-      document.getElementById('step-done-title').textContent = reviewMode ? 'Đã xem lại xong!' : 'Hoàn thành bước ' + (currentStepIndex + 1) + '!';
-      document.getElementById('step-done-sub').textContent = reviewMode ? 'Bạn có thể quay lại danh sách bước.' : (total > 0 ? ('Đúng ' + correct + '/' + total + ' câu.') : '');
-      showScreen('step-done');
-    }
-  }
- 
-  function showExamResult(correct, total) {
-    const pct = Math.round((correct / total) * 100);
-    document.getElementById('exam-result-pct').textContent = pct + '%';
-    document.getElementById('exam-result-detail').textContent = 'Đúng ' + correct + '/' + total + ' câu';
-    const circle = document.getElementById('exam-score-circle');
-    circle.classList.remove('pass', 'fail');
-    circle.classList.add(pct >= 80 ? 'pass' : 'fail');
-    document.getElementById('exam-result-emoji').textContent = pct >= 80 ? '🏆' : '📖';
-    document.getElementById('exam-result-title').textContent = pct >= 80 ? 'Xuất sắc!' : 'Cố gắng thêm nhé!';
-    showScreen('exam-result');
+    document.getElementById('step-done-title').textContent = reviewMode ? 'Đã xem lại xong!' : 'Hoàn thành bước ' + (currentStepIndex + 1) + '!';
+    document.getElementById('step-done-sub').textContent = reviewMode ? 'Bạn có thể quay lại danh sách bước.' : (total > 0 ? ('Đúng ' + correct + '/' + total + ' câu.') : '');
+    showScreen('step-done');
   }
   document.getElementById('step-done-continue').addEventListener('click', () => { renderUnitDetail(); showScreen('unit-detail'); });
  
-  function finishUnit() {
+  function finishUnit(examCorrect, examTotal) {
     const up = getUP(currentUnit.id);
-    let totalCorrect = 0, totalQ = 0;
-    up.stepResults.forEach(r => { if (r) { totalCorrect += r.correct; totalQ += r.total; } });
-    const pct = totalQ > 0 ? Math.round((totalCorrect / totalQ) * 100) : 0;
+    up.examResult = { correct: examCorrect, total: examTotal };
+    const pct = examTotal > 0 ? Math.round((examCorrect / examTotal) * 100) : 0;
     if (pct > up.bestScore) up.bestScore = pct;
     const passed = pct >= PASS_THRESHOLD;
     if (passed) up.passed = true;
@@ -1018,29 +1094,20 @@
       unlockMsg.className = 'unlock-msg pass';
       document.getElementById('result-next').style.display = nextUnit ? 'inline-block' : 'none';
     } else {
-      unlockMsg.textContent = 'Cần đạt tối thiểu ' + PASS_THRESHOLD + '% để mở Unit tiếp theo. Hãy học lại nhé!';
+      unlockMsg.textContent = 'Cần đạt tối thiểu ' + PASS_THRESHOLD + '% ở bài kiểm tra để mở Unit tiếp theo. Bạn làm lại bài kiểm tra nhé!';
       unlockMsg.className = 'unlock-msg fail';
       document.getElementById('result-next').style.display = 'none';
     }
     showScreen('result');
   }
   document.getElementById('result-retry').addEventListener('click', () => {
-    const up = getUP(currentUnit.id);
-    up.unlockedStep = 0; up.stepResults = []; saveProgress();
-    renderUnitDetail(); showScreen('unit-detail');
+    enterStep(8);
   });
   document.getElementById('result-next').addEventListener('click', () => {
     const nextUnit = UNITS.find(u => u.id === currentUnit.id + 1);
     if (nextUnit) { currentUnit = nextUnit; renderUnitDetail(); showScreen('unit-detail'); }
   });
   document.getElementById('result-map').addEventListener('click', () => { renderMap(); showScreen('map'); });
- 
-  document.getElementById('exam-retry').addEventListener('click', () => {
-    enterStep(8, false);
-  });
-  document.getElementById('exam-back').addEventListener('click', () => {
-    renderUnitDetail(); showScreen('unit-detail');
-  });
  
   // ================= STEP 1: PHONICS INTRO =================
   function startPhonicsIntro() {
@@ -1235,7 +1302,7 @@
     optionsEl.innerHTML = '';
     q.options.forEach((opt, idx) => {
       const btn = document.createElement('button');
-      btn.className = 'opt-btn opt-locked';
+      btn.className = 'opt-btn opt-locked opt-c' + (idx % 4);
       btn.style.display = 'flex';
       btn.style.alignItems = 'center';
       btn.style.justifyContent = 'center';
