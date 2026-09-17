@@ -523,7 +523,7 @@
           <div class="emoji-big" id="speaking-emoji"></div>
           <div class="word-en" id="speaking-word"></div>
           <button class="speak-btn" id="speaking-listen">🔊 Nghe mẫu</button>
-          <div class="instructions" style="margin-top:14px;">Bấm micro rồi đọc to từ này nhé!</div>
+          <div class="instructions" style="margin-top:14px;">Giữ nút micro, đọc to từ này, rồi thả tay ra nhé!</div>
           <button class="mic-btn" id="speaking-mic">🎤</button>
           <div class="feedback" id="speaking-feedback"></div>
           <div id="speaking-unsupported" style="display:none;">
@@ -1636,6 +1636,7 @@
  
   function renderSpeaking(q) {
     document.getElementById('block-speaking').style.display = 'block';
+    micIsHeld = false;
     document.getElementById('speaking-emoji').textContent = q.word.emoji;
     document.getElementById('speaking-word').textContent = q.word.word;
     document.getElementById('speaking-feedback').textContent = '';
@@ -1654,24 +1655,21 @@
     const q = stepQueue[stepQIdx];
     if (q) speak(q.word.word);
   });
-  document.getElementById('speaking-mic').addEventListener('click', () => {
-    if (stepAnswered || !recognizer) return;
+  let micIsHeld = false;
+  let permissionChecked = false;
+ 
+  function startListening() {
     const q = stepQueue[stepQIdx];
     const micBtn = document.getElementById('speaking-mic');
     const fb = document.getElementById('speaking-feedback');
     micBtn.classList.add('listening');
-    fb.textContent = '🎧 Đang nghe... hãy đọc to nhé!';
+    fb.textContent = '🎧 Đang nghe... (đang giữ nút, hãy đọc to!)';
     fb.className = 'feedback';
     try {
       recognizer.start();
-    } catch (e) {
-      micBtn.classList.remove('listening');
-      fb.textContent = '⚠️ Không thể bật micro. Kiểm tra quyền truy cập micro của trình duyệt nhé.';
-      fb.className = 'feedback bad';
-      return;
-    }
+    } catch (e) { /* có thể đã start rồi, bỏ qua */ }
+ 
     recognizer.onresult = (event) => {
-      micBtn.classList.remove('listening');
       if (stepAnswered) return;
       const transcript = (event.results[0][0].transcript || '').toLowerCase().trim();
       const correct = q.word.word.toLowerCase();
@@ -1682,13 +1680,73 @@
       goNext(ok);
     };
     recognizer.onerror = (event) => {
-      micBtn.classList.remove('listening');
       if (stepAnswered) return;
-      fb.textContent = '⚠️ Không nghe rõ, hãy thử lại (kiểm tra quyền micro nếu cần).';
+      let msg = '⚠️ Không nghe rõ, hãy giữ nút và thử lại.';
+      if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
+        msg = '⚠️ Trình duyệt chưa được cấp quyền micro. Kiểm tra lại cài đặt quyền cho trang này nhé.';
+      } else if (event.error === 'network') {
+        msg = '⚠️ Lỗi kết nối mạng — tính năng nhận diện giọng nói cần có Internet.';
+      } else if (event.error === 'no-speech') {
+        msg = '⚠️ Không nghe thấy gì. Nhớ giữ nút micro TRONG LÚC đọc nhé.';
+      } else if (event.error === 'audio-capture') {
+        msg = '⚠️ Không tìm thấy micro trên thiết bị này.';
+      } else if (event.error === 'aborted') {
+        return; // do người dùng thả tay quá nhanh, bỏ qua không báo lỗi
+      }
+      fb.textContent = msg;
       fb.className = 'feedback bad';
     };
     recognizer.onend = () => { micBtn.classList.remove('listening'); };
-  });
+  }
+ 
+  function stopListening() {
+    const micBtn = document.getElementById('speaking-mic');
+    micBtn.classList.remove('listening');
+    try { recognizer.stop(); } catch (e) {}
+  }
+ 
+  function handleMicDown(e) {
+    e.preventDefault();
+    if (stepAnswered || !recognizer || micIsHeld) return;
+    micIsHeld = true;
+    const fb = document.getElementById('speaking-feedback');
+ 
+    if (!permissionChecked && navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      fb.textContent = '🎙️ Đang xin quyền micro...';
+      fb.className = 'feedback';
+      navigator.mediaDevices.getUserMedia({ audio: true })
+        .then((stream) => {
+          stream.getTracks().forEach(t => t.stop());
+          permissionChecked = true;
+          if (micIsHeld) startListening();
+        })
+        .catch((err) => {
+          micIsHeld = false;
+          if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+            fb.textContent = '⚠️ Bạn cần cho phép trình duyệt dùng micro. Bấm vào biểu tượng 🔒/ⓘ cạnh thanh địa chỉ, bật quyền "Microphone" cho trang này, rồi tải lại trang.';
+          } else if (err.name === 'NotFoundError') {
+            fb.textContent = '⚠️ Không tìm thấy micro trên thiết bị này.';
+          } else {
+            fb.textContent = '⚠️ Không truy cập được micro: ' + err.name;
+          }
+          fb.className = 'feedback bad';
+        });
+    } else {
+      startListening();
+    }
+  }
+  function handleMicUp(e) {
+    if (e) e.preventDefault();
+    if (!micIsHeld) return;
+    micIsHeld = false;
+    stopListening();
+  }
+ 
+  const micBtnEl = document.getElementById('speaking-mic');
+  micBtnEl.addEventListener('pointerdown', handleMicDown);
+  micBtnEl.addEventListener('pointerup', handleMicUp);
+  micBtnEl.addEventListener('pointerleave', handleMicUp);
+  micBtnEl.addEventListener('pointercancel', handleMicUp);
   document.getElementById('speaking-fallback-ok').addEventListener('click', () => {
     if (stepAnswered) return;
     stepAnswered = true;
