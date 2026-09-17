@@ -16,7 +16,7 @@
     }
   }
   :root[data-theme="dark"] { --bg:#241c12; --card-bg:#362a1a; --text:#fdf1de; --text-soft:#cbb894; --border:#55411f; --shadow:rgba(0,0,0,0.35); }
-
+ 
   * { box-sizing: border-box; }
   body {
     margin: 0; background: var(--bg); color: var(--text);
@@ -24,7 +24,7 @@
     min-height: 100vh; padding: 16px;
   }
   .app { max-width: 720px; margin: 0 auto; }
-
+ 
   header.top {
     background: linear-gradient(135deg, #ffd54f, #ff9800);
     border-radius: 24px; padding: 18px 20px; display: flex; align-items: center; justify-content: space-between;
@@ -35,7 +35,7 @@
   header.top h1 { font-size: 17px; margin: 0; line-height:1.3; }
   header.top p { margin: 2px 0 0; font-size: 12px; opacity: 0.85; }
   .back-btn { background: rgba(255,255,255,0.5); border:none; border-radius:12px; padding:8px 12px; font-weight:bold; cursor:pointer; color:#4a2c00; font-size:14px; }
-
+ 
   .top-actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
   .ta-btn {
     border:none; border-radius:14px; padding:9px 14px; font-weight:bold; font-size:13px; cursor:pointer;
@@ -45,7 +45,7 @@
   .ta-signup { background: white; color: var(--purple); border:2px solid #e6c8f0 !important; }
   .ta-locked1 { background: linear-gradient(135deg,#e05a2b,#b8441c); color:white; }
   .ta-locked2 { background: linear-gradient(135deg,#1fae8e,#0f8f73); color:white; }
-
+ 
   /* ===== Modal popup ===== */
   .modal-overlay {
     position: fixed; inset: 0; background: rgba(0,0,0,0.45);
@@ -72,10 +72,10 @@
   .modal-btn.signin { background: linear-gradient(135deg,#ffb74d,#ff9800); color:white; }
   .modal-btn.signup { background:white; color: var(--purple); border:2px solid #e6c8f0; }
   .modal-btn.later { background:#eef0f3; color:#5a6270; }
-
+ 
   .screen { display: none; }
   .screen.active { display: block; }
-
+ 
   /* ===== UNIT MAP ===== */
   .unit-list { display: flex; flex-direction: column; gap: 12px; margin-top: 18px; }
   .unit-tile {
@@ -92,7 +92,7 @@
   .badge-pass { background:#d4f7dc; color:#1c6b2a; font-size:11px; font-weight:bold; padding:3px 8px; border-radius:10px; display:inline-block; margin-top:4px; }
   .badge-progress { background:#fff3d0; color:#8a6100; font-size:11px; font-weight:bold; padding:3px 8px; border-radius:10px; display:inline-block; margin-top:4px; }
   .lock-note { font-size: 11px; color: var(--text-soft); margin-top:4px; font-style: italic; }
-
+ 
   /* ===== UNIT DETAIL (8 step list) ===== */
   .step-list { display:flex; flex-direction:column; gap: 8px; margin-top: 16px; }
   .step-tile {
@@ -107,10 +107,10 @@
   .step-tile.locked .step-num { background: var(--text-soft); }
   .step-tile .step-name { font-weight:bold; flex:1; font-size: 14px; }
   .step-tile .step-check { font-size:18px; }
-
+ 
   .card { background: var(--card-bg); border-radius: 20px; padding: 20px; box-shadow: 0 4px 14px var(--shadow); margin-top: 16px; }
   .instructions { font-size: 13px; color: var(--text-soft); text-align:center; margin-bottom: 10px; }
-
+ 
   /* ===== Flashcards ===== */
   .flash-wrap { display:flex; flex-direction: column; align-items: center; gap: 14px; }
   .flashcard {
@@ -134,17 +134,17 @@
   .primary-btn:active { transform: translateY(3px); box-shadow:none; }
   .primary-btn.green { background: var(--green); box-shadow: 0 3px 0 #2e7d32; }
   .primary-btn.purple { background: var(--purple); box-shadow: 0 3px 0 #6c3483; }
-
+ 
   /* ===== progress dots ===== */
   .dots { display:flex; justify-content:center; gap:6px; margin-bottom:14px; }
   .dots span { width:10px; height:10px; border-radius:50%; background: var(--border); }
   .dots span.done { background: var(--green); }
   .dots span.wrong-dot { background: var(--red); }
   .dots span.current { background: var(--primary); }
-
+ 
   /* ===== step header inside player ===== */
   .step-title { text-align:center; font-weight:bold; font-size: 15px; color: var(--text-soft); margin-bottom: 6px; }
-
+ 
   /* ===== MCQ block ===== */
   .mcq-prompt { text-align:center; }
   .mcq-prompt .emoji-big { font-size: 84px; }
@@ -165,7 +165,7 @@
   .opt-speak-icon.heard { background: var(--green); }
   .listen-hint { text-align:center; font-size: 13px; color: var(--primary-dark); font-weight:bold; margin-bottom: 10px; }
   .listen-hint.all-done { color: var(--green); }
-
+ 
   /* ===== Fill missing ===== */
   .fill-item { text-align:center; }
   .fill-item .emoji-big { font-size: 76px; }
@@ -176,7 +176,7 @@
   .feedback { margin-top:10px; font-weight:bold; font-size:15px; min-height: 22px; text-align:center; }
   .feedback.ok { color: var(--green); }
   .feedback.bad { color: var(--red); }
-
+ 
   /* ===== Remove letter ===== */
   .remove-item { text-align:center; }
   .remove-item .emoji-big { font-size: 76px; }
@@ -188,7 +188,7 @@
   .letter-btn.removed-correct { background:#d4f7dc; border-color: var(--green); }
   .letter-btn.removed-wrong { background:#fbdcdc; border-color: var(--red); }
   .letter-btn[disabled] { cursor:default; }
-
+ 
   /* ===== Odd one out ===== */
   .odd-grid { display:grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px; }
   .odd-card {
@@ -199,7 +199,7 @@
   .odd-card .oc-label { font-weight:bold; margin-top:4px; font-size:14px; }
   .odd-card.correct { border-color: var(--green); background:#d4f7dc; }
   .odd-card.wrong { border-color: var(--red); background:#fbdcdc; }
-
+ 
   /* ===== Sentence builder ===== */
   .sentence-answer-area {
     min-height: 56px; border: 2px dashed var(--border); border-radius: 14px; padding: 10px;
@@ -211,7 +211,7 @@
   }
   .word-chip.placed { background: var(--card-bg); color: var(--text); border: 2px solid var(--border); }
   .chip-bank { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-bottom: 14px; }
-
+ 
   /* ===== Result screen ===== */
   .result-screen { text-align:center; padding: 10px; }
   .result-screen .big-emoji { font-size: 60px; }
@@ -226,14 +226,55 @@
   .unlock-msg { font-weight:bold; font-size:15px; margin: 10px 0; }
   .unlock-msg.pass { color: var(--green); }
   .unlock-msg.fail { color: var(--red); }
-
+ 
   .step-done-banner { text-align:center; padding: 30px 10px; }
   .step-done-banner .big-emoji { font-size:56px; }
+ 
+  /* ===== Login screen ===== */
+  .login-wrap {
+    min-height: 80vh; display:flex; align-items:center; justify-content:center; padding: 16px;
+  }
+  .login-box {
+    background: var(--card-bg); border-radius: 24px; padding: 32px 26px; max-width: 360px; width:100%;
+    text-align:center; box-shadow: 0 6px 20px var(--shadow); border: 2px solid var(--border);
+  }
+  .login-box .login-emoji { font-size: 56px; margin-bottom: 8px; }
+  .login-box h2 { color: var(--primary-dark); margin: 0 0 6px; font-size: 20px; }
+  .login-box p { color: var(--text-soft); font-size: 13px; margin: 0 0 20px; }
+  .login-field { text-align:left; margin-bottom: 14px; }
+  .login-field label { display:block; font-size: 13px; font-weight:bold; color: var(--text); margin-bottom: 5px; }
+  .login-field input {
+    width:100%; padding: 11px 14px; border-radius: 12px; border: 2px solid var(--border);
+    font-size: 15px; background: var(--bg); color: var(--text); box-sizing:border-box;
+  }
+  .login-submit {
+    width:100%; background: linear-gradient(135deg,#ffb74d,#ff9800); color:white; border:none;
+    border-radius:14px; padding:13px; font-weight:bold; font-size:15px; cursor:pointer; margin-top:6px;
+  }
+  .login-error { color: var(--red); font-size: 13px; font-weight:bold; margin-top: 10px; min-height:18px; }
 </style>
 </head>
 <body>
-<div class="app">
-
+<div class="login-wrap" id="login-wrap">
+  <div class="login-box">
+    <div class="login-emoji">🐝</div>
+    <h2>Ong Chăm Chỉ</h2>
+    <p>Nhập tài khoản để vào học nhé!</p>
+    <div class="login-field">
+      <label>Tên đăng nhập</label>
+      <input type="text" id="login-username" autocomplete="off">
+    </div>
+    <div class="login-field">
+      <label>Mật khẩu</label>
+      <input type="password" id="login-password" autocomplete="off">
+    </div>
+    <button class="login-submit" id="login-submit">Đăng nhập</button>
+    <div class="login-error" id="login-error"></div>
+  </div>
+</div>
+ 
+<div class="app" id="main-app" style="display:none;">
+ 
   <header class="top">
     <div class="title-block">
       <div class="emoji" id="header-emoji">🗺️</div>
@@ -244,36 +285,17 @@
     </div>
     <button class="back-btn" id="back-btn" style="display:none;">‹ Quay lại</button>
   </header>
-
-  <div class="top-actions" id="top-actions">
-    <button class="ta-btn ta-signin" id="ta-signin">Sign in</button>
-    <button class="ta-btn ta-signup" id="ta-signup">Sign up</button>
-    <button class="ta-btn ta-locked1" id="ta-map">🗺️ Bản đồ tuần 🔒</button>
-    <button class="ta-btn ta-locked2" id="ta-minigame">🎮 Mini Game 🔒</button>
-  </div>
-
-  <div class="modal-overlay" id="modal-overlay">
-    <div class="modal-box">
-      <div class="modal-icon" id="modal-icon">🐝</div>
-      <h3 id="modal-title">Bản đồ tuần / Tiến trình tuần</h3>
-      <p id="modal-desc">Đây là tính năng dành cho tài khoản Trial hoặc VIP. Con có thể Sign in nếu đã có tài khoản hoặc Sign up để đăng ký nhé!</p>
-      <div class="modal-note">🌻 Các Unit cơ bản vẫn học miễn phí bình thường nhé!</div>
-      <button class="modal-btn signin">Sign in</button>
-      <button class="modal-btn signup">Sign up</button>
-      <button class="modal-btn later" id="modal-later">Để sau nhé</button>
-    </div>
-  </div>
-
+ 
   <!-- SCREEN: UNIT MAP -->
   <div class="screen active" id="screen-map">
     <div class="unit-list" id="unit-list"></div>
   </div>
-
+ 
   <!-- SCREEN: UNIT DETAIL (8 bước) -->
   <div class="screen" id="screen-unit-detail">
     <div class="step-list" id="step-list"></div>
   </div>
-
+ 
   <!-- SCREEN: STEP DONE transition -->
   <div class="screen" id="screen-step-done">
     <div class="card step-done-banner">
@@ -283,7 +305,7 @@
       <button class="primary-btn" id="step-done-continue">Tiếp tục</button>
     </div>
   </div>
-
+ 
   <!-- SCREEN: VOCAB FLASHCARDS (bước 2 riêng vì có flashcard trước quiz) -->
   <div class="screen" id="screen-vocab">
     <div class="card">
@@ -303,7 +325,7 @@
       </div>
     </div>
   </div>
-
+ 
   <!-- SCREEN: PHONICS INTRO (bước 1 riêng vì có phần giới thiệu âm) -->
   <div class="screen" id="screen-phonics-intro">
     <div class="card" style="text-align:center;">
@@ -314,13 +336,13 @@
       <button class="primary-btn" id="phonics-continue">📝 Vào câu hỏi</button>
     </div>
   </div>
-
+ 
   <!-- SCREEN: GENERIC STEP PLAYER (dùng cho remove, fill, odd, reading, sentence, fillsentence, các câu quiz của phonics/vocab) -->
   <div class="screen" id="screen-step-player">
     <div class="card">
       <div class="step-title" id="sp-title"></div>
       <div class="dots" id="sp-dots"></div>
-
+ 
       <div id="block-mcq" style="display:none;">
         <div class="mcq-prompt">
           <div class="emoji-big" id="mcq-emoji" style="display:none;"></div>
@@ -333,7 +355,7 @@
           <div class="options" id="mcq-options"></div>
         </div>
       </div>
-
+ 
       <div id="block-fill" style="display:none;">
         <div class="fill-item">
           <div class="emoji-big" id="fill-emoji"></div>
@@ -342,7 +364,7 @@
           <div class="feedback" id="fill-feedback"></div>
         </div>
       </div>
-
+ 
       <div id="block-remove" style="display:none;">
         <div class="remove-item">
           <div class="emoji-big" id="remove-emoji"></div>
@@ -351,13 +373,13 @@
           <div class="feedback" id="remove-feedback"></div>
         </div>
       </div>
-
+ 
       <div id="block-odd" style="display:none;">
         <div class="instructions" id="odd-question">Từ nào khác với các từ còn lại?</div>
         <div class="odd-grid" id="odd-grid"></div>
         <div class="feedback" id="odd-feedback"></div>
       </div>
-
+ 
       <div id="block-sentence" style="display:none;">
         <div class="instructions">Sắp xếp các từ thành câu đúng</div>
         <div class="sentence-answer-area" id="sentence-answer-area"></div>
@@ -367,7 +389,7 @@
       </div>
     </div>
   </div>
-
+ 
   <!-- SCREEN: RESULT -->
   <div class="screen" id="screen-result">
     <div class="card result-screen">
@@ -383,17 +405,48 @@
       <button class="primary-btn purple" id="result-map">🗺️ Về bản đồ Unit</button>
     </div>
   </div>
-
+ 
 </div>
-
+ 
 <script>
 (function() {
+  // ================= LOGIN GATE =================
+  const VALID_USERNAME = 'tienganh';
+  const VALID_PASSWORD = '1';
+ 
+  function showApp() {
+    document.getElementById('login-wrap').style.display = 'none';
+    document.getElementById('main-app').style.display = 'block';
+    initApp();
+  }
+ 
+  function tryLogin() {
+    const u = document.getElementById('login-username').value.trim();
+    const p = document.getElementById('login-password').value;
+    const err = document.getElementById('login-error');
+    if (u === VALID_USERNAME && p === VALID_PASSWORD) {
+      try { localStorage.setItem('tienganh_logged_in', '1'); } catch (e) {}
+      showApp();
+    } else {
+      err.textContent = '❌ Sai tên đăng nhập hoặc mật khẩu.';
+    }
+  }
+  document.getElementById('login-submit').addEventListener('click', tryLogin);
+  document.getElementById('login-password').addEventListener('keydown', (e) => { if (e.key === 'Enter') tryLogin(); });
+  document.getElementById('login-username').addEventListener('keydown', (e) => { if (e.key === 'Enter') tryLogin(); });
+ 
+  let alreadyLoggedIn = false;
+  try { alreadyLoggedIn = localStorage.getItem('tienganh_logged_in') === '1'; } catch (e) {}
+  if (alreadyLoggedIn) { showApp(); }
+ 
+  // ================= MAIN APP (chạy sau khi đăng nhập) =================
+  function initApp() {
   // ================= DATA =================
   const STEP_LABELS = [
     "1. Phonics & Sounds", "2. Vocabulary", "3. Remove Letter", "4. Fill Missing",
     "5. Odd One Out", "6. Reading Stories", "7. Sentence Builder", "8. Fill Sentence"
   ];
-
+ 
   const UNITS = [
     {
       id: 1, title: "Unit 1: At my birthday party", emoji: "🎂",
@@ -749,7 +802,7 @@
     }
   ];
   const PASS_THRESHOLD = 80;
-
+ 
   // ================= PROGRESS (persisted per-viewer) =================
   let progress = {};
   try { const s = localStorage.getItem('unit_progress_v2'); if (s) progress = JSON.parse(s); } catch (e) {}
@@ -767,7 +820,7 @@
     const prev = UNITS.find(u => u.id === unitId - 1);
     return prev ? getUP(prev.id).passed : true;
   }
-
+ 
   // ================= UTIL =================
   function speak(text) {
     try {
@@ -782,7 +835,7 @@
     for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
     return a;
   }
-
+ 
   // ================= NAV =================
   let currentUnit = null;
   let currentStepIndex = 0; // 0..7
@@ -798,7 +851,7 @@
     if (['unit-detail','result'].includes(active)) { renderMap(); showScreen('map'); }
     else { renderUnitDetail(); showScreen('unit-detail'); }
   });
-
+ 
   // ================= UNIT MAP =================
   function renderMap() {
     document.getElementById('header-emoji').textContent = '🗺️';
@@ -829,7 +882,7 @@
       list.appendChild(tile);
     });
   }
-
+ 
   // ================= UNIT DETAIL (8-step checklist) =================
   function renderUnitDetail() {
     document.getElementById('header-emoji').textContent = currentUnit.emoji;
@@ -860,7 +913,7 @@
       list.appendChild(tile);
     });
   }
-
+ 
   function enterStep(stepIndex, isDoneBefore) {
     currentStepIndex = stepIndex;
     const up = getUP(currentUnit.id);
@@ -871,7 +924,7 @@
     else if (key === 'vocab') { startVocabFlashcards(); }
     else { startGenericStep(key); }
   }
-
+ 
   // ================= STEP COMPLETION =================
   function completeStep(correct, total) {
     const up = getUP(currentUnit.id);
@@ -889,7 +942,7 @@
     }
   }
   document.getElementById('step-done-continue').addEventListener('click', () => { renderUnitDetail(); showScreen('unit-detail'); });
-
+ 
   function finishUnit() {
     const up = getUP(currentUnit.id);
     let totalCorrect = 0, totalQ = 0;
@@ -899,7 +952,7 @@
     const passed = pct >= PASS_THRESHOLD;
     if (passed) up.passed = true;
     saveProgress();
-
+ 
     document.getElementById('result-pct').textContent = pct + '%';
     const circle = document.getElementById('score-circle');
     circle.classList.remove('pass', 'fail'); circle.classList.add(passed ? 'pass' : 'fail');
@@ -928,7 +981,7 @@
     if (nextUnit) { currentUnit = nextUnit; renderUnitDetail(); showScreen('unit-detail'); }
   });
   document.getElementById('result-map').addEventListener('click', () => { renderMap(); showScreen('map'); });
-
+ 
   // ================= STEP 1: PHONICS INTRO =================
   function startPhonicsIntro() {
     document.getElementById('phonics-letter-big').textContent = currentUnit.phonicsLetter.upper + currentUnit.phonicsLetter.lower;
@@ -950,7 +1003,7 @@
   document.getElementById('phonics-continue').addEventListener('click', () => {
     startGenericStep('phonics-check');
   });
-
+ 
   // ================= STEP 2: VOCAB FLASHCARDS =================
   let fcIndex = 0;
   function startVocabFlashcards() {
@@ -972,13 +1025,13 @@
   document.getElementById('fc-prev').addEventListener('click', () => { fcIndex = (fcIndex - 1 + currentUnit.words.length) % currentUnit.words.length; renderFlashcard(); });
   document.getElementById('fc-next').addEventListener('click', () => { fcIndex = (fcIndex + 1) % currentUnit.words.length; renderFlashcard(); });
   document.getElementById('go-to-vocab-quiz').addEventListener('click', () => startGenericStep('vocab-quiz'));
-
+ 
   // ================= GENERIC STEP PLAYER =================
   let stepQueue = [];
   let stepQIdx = 0;
   let stepCorrect = 0;
   let stepAnswered = false;
-
+ 
   const STEP_TITLES = {
     'phonics-check': '1. Phonics & Sounds — Câu hỏi',
     'vocab-quiz': '2. Vocabulary — Câu hỏi',
@@ -991,7 +1044,7 @@
   };
   // map generic key to the actual step index (0..7) for progress recording
   const KEY_TO_STEPINDEX = { 'phonics-check': 0, 'vocab-quiz': 1, 'remove': 2, 'fill': 3, 'odd': 4, 'reading': 5, 'sentence': 6, 'fillsentence': 7 };
-
+ 
   function startGenericStep(key) {
     currentStepIndex = KEY_TO_STEPINDEX[key];
     stepQIdx = 0; stepCorrect = 0;
@@ -1001,7 +1054,7 @@
     renderStepQuestion(key);
     showScreen('step-player');
   }
-
+ 
   function buildQueue(key) {
     const u = currentUnit;
     if (key === 'phonics-check') {
@@ -1033,7 +1086,7 @@
     }
     return [];
   }
-
+ 
   function renderDots() {
     const el = document.getElementById('sp-dots');
     el.innerHTML = '';
@@ -1044,11 +1097,11 @@
       el.appendChild(s);
     });
   }
-
+ 
   function hideAllBlocks() {
     ['mcq','fill','remove','odd','sentence'].forEach(b => document.getElementById('block-' + b).style.display = 'none');
   }
-
+ 
   function renderStepQuestion() {
     stepAnswered = false;
     if (stepQIdx >= stepQueue.length) {
@@ -1064,13 +1117,13 @@
     else if (q.type === 'odd') renderOdd(q);
     else if (q.type === 'sentence') renderSentence(q);
   }
-
+ 
   function goNext(correct) {
     if (correct) stepCorrect++;
     const delay = correct ? 1400 : 2600;
     setTimeout(() => { stepQIdx++; renderStepQuestion(); }, delay);
   }
-
+ 
   // ---- MCQ (dùng cho phonics-check, vocab-quiz, reading, fillsentence) ----
   function renderMCQ(q) {
     document.getElementById('block-mcq').style.display = 'block';
@@ -1084,14 +1137,14 @@
     const storySpeakBtn = document.getElementById('mcq-story-speak');
     storySpeakBtn.style.display = q.story ? 'inline-block' : 'none';
     storySpeakBtn.onclick = () => speak(q.story);
-
+ 
     sentEl.style.display = q.sentence ? 'block' : 'none';
     if (q.sentence) sentEl.textContent = q.sentence;
     document.getElementById('mcq-question').textContent = q.question;
     const questionSpeakBtn = document.getElementById('mcq-question-speak');
     questionSpeakBtn.style.display = 'inline-block';
     questionSpeakBtn.onclick = () => speak(q.sentence ? (q.sentence + '. ' + q.question) : q.question);
-
+ 
     const listenHint = document.getElementById('mcq-listen-hint');
     const listenedSet = new Set();
     function updateListenHint() {
@@ -1104,7 +1157,7 @@
       }
     }
     updateListenHint();
-
+ 
     const optionsEl = document.getElementById('mcq-options');
     optionsEl.innerHTML = '';
     q.options.forEach((opt, idx) => {
@@ -1114,7 +1167,7 @@
       btn.style.alignItems = 'center';
       btn.style.justifyContent = 'center';
       btn.style.gap = '10px';
-
+ 
       const speakIcon = document.createElement('span');
       speakIcon.textContent = '🔊';
       speakIcon.className = 'opt-speak-icon';
@@ -1129,14 +1182,14 @@
           optionsEl.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('opt-locked'));
         }
       });
-
+ 
       const label = document.createElement('span');
       label.className = 'opt-label';
       label.textContent = opt;
-
+ 
       btn.appendChild(speakIcon);
       btn.appendChild(label);
-
+ 
       btn.addEventListener('click', () => {
         if (stepAnswered) return;
         if (listenedSet.size < q.options.length) return; // chưa nghe đủ, chưa cho chọn
@@ -1160,7 +1213,7 @@
       optionsEl.appendChild(btn);
     });
   }
-
+ 
   // ---- FILL MISSING ----
   function renderFill(q) {
     document.getElementById('block-fill').style.display = 'block';
@@ -1194,7 +1247,7 @@
     else { fb.textContent = '❌ Đáp án đúng là: ' + q.word.word; fb.className = 'feedback bad'; }
     goNext(ok);
   });
-
+ 
   // ---- REMOVE LETTER ----
   function renderRemove(q) {
     document.getElementById('block-remove').style.display = 'block';
@@ -1225,7 +1278,7 @@
       row.appendChild(btn);
     });
   }
-
+ 
   // ---- ODD ONE OUT ----
   function renderOdd(q) {
     document.getElementById('block-odd').style.display = 'block';
@@ -1258,12 +1311,12 @@
       grid.appendChild(card);
     });
   }
-
+ 
   // ---- SENTENCE BUILDER ----
   let sentenceTokens = [];   // [{id, text}]
   let originalBankOrder = []; // fixed shuffled order of tokens
   let placedIds = [];        // array of token ids currently placed, in placement order
-
+ 
   function renderSentence(q) {
     document.getElementById('block-sentence').style.display = 'block';
     document.getElementById('sentence-feedback').textContent = '';
@@ -1273,13 +1326,13 @@
     placedIds = [];
     renderSentenceUI();
   }
-
+ 
   function renderSentenceUI() {
     const answerArea = document.getElementById('sentence-answer-area');
     const bank = document.getElementById('sentence-chip-bank');
     answerArea.innerHTML = '';
     bank.innerHTML = '';
-
+ 
     placedIds.forEach((id) => {
       const token = sentenceTokens.find(t => t.id === id);
       const chip = document.createElement('button');
@@ -1292,7 +1345,7 @@
       });
       answerArea.appendChild(chip);
     });
-
+ 
     originalBankOrder.forEach((token) => {
       if (placedIds.includes(token.id)) return;
       const chip = document.createElement('button');
@@ -1306,7 +1359,7 @@
       bank.appendChild(chip);
     });
   }
-
+ 
   document.getElementById('sentence-check').addEventListener('click', () => {
     if (stepAnswered) return;
     const q = stepQueue[stepQIdx];
@@ -1318,36 +1371,14 @@
     else { fb.textContent = '❌ Câu đúng là: "' + q.target + '"'; fb.className = 'feedback bad'; }
     goNext(ok);
   });
-
-  // ================= HEADER ACTIONS + MODAL =================
-  function openModal(title, desc) {
-    document.getElementById('modal-title').textContent = title;
-    document.getElementById('modal-desc').textContent = desc;
-    document.getElementById('modal-overlay').classList.add('open');
-  }
-  function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); }
-
-  document.getElementById('ta-map').addEventListener('click', () => {
-    openModal('Bản đồ tuần / Tiến trình tuần', 'Đây là tính năng dành cho tài khoản Trial hoặc VIP. Con có thể Sign in nếu đã có tài khoản hoặc Sign up để đăng ký nhé!');
-  });
-  document.getElementById('ta-minigame').addEventListener('click', () => {
-    openModal('Mini Game', 'Kho Mini Game dành cho tài khoản Trial hoặc VIP. Con có thể Sign in nếu đã có tài khoản hoặc Sign up để đăng ký nhé!');
-  });
-  document.getElementById('ta-signin').addEventListener('click', () => {
-    openModal('Đăng nhập', 'Tính năng đăng nhập đang được xây dựng. Bạn quay lại sau nhé!');
-  });
-  document.getElementById('ta-signup').addEventListener('click', () => {
-    openModal('Đăng ký tài khoản', 'Tính năng đăng ký đang được xây dựng. Bạn quay lại sau nhé!');
-  });
-  document.getElementById('modal-later').addEventListener('click', closeModal);
-  document.getElementById('modal-overlay').addEventListener('click', (e) => {
-    if (e.target.id === 'modal-overlay') closeModal();
-  });
-
+ 
   // ================= INIT =================
   renderMap();
   showScreen('map');
+  } // end initApp
 })();
 </script>
 </body>
 </html>
+ 
+
