@@ -1634,6 +1634,47 @@
     } catch (e) { recognizer = null; }
   }
  
+  let micIsHeld = false;
+  let permissionChecked = false;
+  let permissionPending = false;
+ 
+  function ensureMicPermission() {
+    const micBtn = document.getElementById('speaking-mic');
+    const fb = document.getElementById('speaking-feedback');
+    if (permissionChecked || permissionPending) return;
+    if (!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)) {
+      permissionChecked = true; // không có API kiểm tra trước, cứ để thử khi bấm giữ
+      return;
+    }
+    permissionPending = true;
+    micBtn.disabled = true;
+    micBtn.style.opacity = '0.5';
+    fb.textContent = '🎙️ Đang chuẩn bị micro, chờ chút nhé...';
+    fb.className = 'feedback';
+    navigator.mediaDevices.getUserMedia({ audio: true })
+      .then((stream) => {
+        stream.getTracks().forEach(t => t.stop());
+        permissionChecked = true;
+        permissionPending = false;
+        micBtn.disabled = false;
+        micBtn.style.opacity = '1';
+        fb.textContent = '';
+      })
+      .catch((err) => {
+        permissionPending = false;
+        micBtn.disabled = false;
+        micBtn.style.opacity = '1';
+        if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+          fb.textContent = '⚠️ Bạn cần cho phép trình duyệt dùng micro. Bấm vào biểu tượng 🔒/ⓘ cạnh thanh địa chỉ, bật quyền "Microphone" cho trang này, rồi tải lại trang.';
+        } else if (err.name === 'NotFoundError') {
+          fb.textContent = '⚠️ Không tìm thấy micro trên thiết bị này.';
+        } else {
+          fb.textContent = '⚠️ Không truy cập được micro: ' + err.name;
+        }
+        fb.className = 'feedback bad';
+      });
+  }
+ 
   function renderSpeaking(q) {
     document.getElementById('block-speaking').style.display = 'block';
     micIsHeld = false;
@@ -1646,6 +1687,7 @@
     if (recognizer) {
       micBtn.style.display = 'inline-block';
       unsupportedBlock.style.display = 'none';
+      ensureMicPermission();
     } else {
       micBtn.style.display = 'none';
       unsupportedBlock.style.display = 'block';
@@ -1655,9 +1697,6 @@
     const q = stepQueue[stepQIdx];
     if (q) speak(q.word.word);
   });
-  let micIsHeld = false;
-  let permissionChecked = false;
- 
   function startListening() {
     const q = stepQueue[stepQIdx];
     const micBtn = document.getElementById('speaking-mic');
@@ -1707,11 +1746,13 @@
  
   function handleMicDown(e) {
     e.preventDefault();
-    if (stepAnswered || !recognizer || micIsHeld) return;
+    if (stepAnswered || !recognizer || micIsHeld || permissionPending) return;
     micIsHeld = true;
-    const fb = document.getElementById('speaking-feedback');
- 
-    if (!permissionChecked && navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+    if (permissionChecked) {
+      startListening();
+    } else {
+      // phòng trường hợp hiếm khi quyền chưa kịp xong, xin lại rồi bắt đầu ngay khi có
+      const fb = document.getElementById('speaking-feedback');
       fb.textContent = '🎙️ Đang xin quyền micro...';
       fb.className = 'feedback';
       navigator.mediaDevices.getUserMedia({ audio: true })
@@ -1722,17 +1763,9 @@
         })
         .catch((err) => {
           micIsHeld = false;
-          if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
-            fb.textContent = '⚠️ Bạn cần cho phép trình duyệt dùng micro. Bấm vào biểu tượng 🔒/ⓘ cạnh thanh địa chỉ, bật quyền "Microphone" cho trang này, rồi tải lại trang.';
-          } else if (err.name === 'NotFoundError') {
-            fb.textContent = '⚠️ Không tìm thấy micro trên thiết bị này.';
-          } else {
-            fb.textContent = '⚠️ Không truy cập được micro: ' + err.name;
-          }
+          fb.textContent = '⚠️ Chưa có quyền micro. Bấm vào biểu tượng 🔒/ⓘ cạnh thanh địa chỉ để cấp quyền, rồi thử lại.';
           fb.className = 'feedback bad';
         });
-    } else {
-      startListening();
     }
   }
   function handleMicUp(e) {
