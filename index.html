@@ -390,6 +390,21 @@
     </div>
   </div>
  
+  <!-- SCREEN: EXAM RESULT (bài kiểm tra Unit - bước 9) -->
+  <div class="screen" id="screen-exam-result">
+    <div class="card result-screen">
+      <div class="big-emoji" id="exam-result-emoji">🏆</div>
+      <h2 id="exam-result-title">Hoàn thành!</h2>
+      <div class="score-circle" id="exam-score-circle">
+        <div class="pct" id="exam-result-pct">0%</div>
+        <div class="lbl">chính xác</div>
+      </div>
+      <p id="exam-result-detail" style="color:var(--text-soft); font-size:14px; margin-bottom:14px;"></p>
+      <button class="primary-btn" id="exam-retry">🔁 Làm lại bài kiểm tra</button>
+      <button class="primary-btn purple" id="exam-back">📋 Về danh sách bước</button>
+    </div>
+  </div>
+ 
   <!-- SCREEN: RESULT -->
   <div class="screen" id="screen-result">
     <div class="card result-screen">
@@ -444,7 +459,8 @@
   // ================= DATA =================
   const STEP_LABELS = [
     "1. Phonics & Sounds", "2. Vocabulary", "3. Remove Letter", "4. Fill Missing",
-    "5. Odd One Out", "6. Reading Stories", "7. Sentence Builder", "8. Fill Sentence"
+    "5. Odd One Out", "6. Reading Stories", "7. Sentence Builder", "8. Fill Sentence",
+    "9. Bài kiểm tra Unit"
   ];
  
   const UNITS = [
@@ -840,7 +856,7 @@
   let currentUnit = null;
   let currentStepIndex = 0; // 0..7
   let reviewMode = false;
-  const SCREENS = ['map', 'unit-detail', 'step-done', 'vocab', 'phonics-intro', 'step-player', 'result'];
+  const SCREENS = ['map', 'unit-detail', 'step-done', 'vocab', 'phonics-intro', 'step-player', 'result', 'exam-result'];
   function showScreen(name) {
     SCREENS.forEach(s => document.getElementById('screen-' + s).classList.remove('active'));
     document.getElementById('screen-' + name).classList.add('active');
@@ -849,6 +865,7 @@
   document.getElementById('back-btn').addEventListener('click', () => {
     const active = SCREENS.find(s => document.getElementById('screen-' + s).classList.contains('active'));
     if (['unit-detail','result'].includes(active)) { renderMap(); showScreen('map'); }
+    else if (active === 'exam-result') { renderUnitDetail(); showScreen('unit-detail'); }
     else { renderUnitDetail(); showScreen('unit-detail'); }
   });
  
@@ -892,23 +909,36 @@
     const list = document.getElementById('step-list');
     list.innerHTML = '';
     STEP_LABELS.forEach((label, i) => {
-      const done = i < up.unlockedStep;
       const locked = i > up.unlockedStep;
-      const result = up.stepResults[i];
-      const passed = done && stepPassed(result);
-      const failed = done && !passed;
-      let icon = '▶️';
-      if (locked) icon = '🔒';
-      else if (passed) icon = '✅';
-      else if (failed) icon = '❌';
+      let icon, extraLabel = '';
+      if (i === 8) {
+        // Bước 9: bài kiểm tra tổng hợp — không tính vào khóa/mở Unit, có thể làm lại nhiều lần
+        if (locked) { icon = '🔒'; }
+        else if (up.examResult) {
+          const pct = Math.round((up.examResult.correct / up.examResult.total) * 100);
+          icon = '✅';
+          extraLabel = ' <span style="color:var(--green); font-size:12px; font-weight:normal;">(Điểm: ' + up.examResult.correct + '/' + up.examResult.total + ' - ' + pct + '%, chạm để làm lại)</span>';
+        } else {
+          icon = '🏆';
+        }
+      } else {
+        const done = i < up.unlockedStep;
+        const result = up.stepResults[i];
+        const passed = done && stepPassed(result);
+        const failed = done && !passed;
+        icon = '▶️';
+        if (locked) icon = '🔒';
+        else if (passed) icon = '✅';
+        else if (failed) { icon = '❌'; extraLabel = ' <span style="color:var(--red); font-size:12px; font-weight:normal;">(chưa đạt, chạm để làm lại)</span>'; }
+      }
       const tile = document.createElement('div');
       tile.className = 'step-tile' + (locked ? ' locked' : '');
       tile.innerHTML =
         '<div class="step-num">' + (i + 1) + '</div>' +
-        '<div class="step-name">' + label + (failed ? ' <span style="color:var(--red); font-size:12px; font-weight:normal;">(chưa đạt, chạm để làm lại)</span>' : '') + '</div>' +
+        '<div class="step-name">' + label + extraLabel + '</div>' +
         '<div class="step-check">' + icon + '</div>';
       if (!locked) {
-        tile.addEventListener('click', () => { enterStep(i, done); });
+        tile.addEventListener('click', () => { enterStep(i, i < up.unlockedStep); });
       }
       list.appendChild(tile);
     });
@@ -916,6 +946,11 @@
  
   function enterStep(stepIndex, isDoneBefore) {
     currentStepIndex = stepIndex;
+    if (stepIndex === 8) {
+      reviewMode = false; // bài kiểm tra tổng hợp luôn tính điểm mới mỗi lần làm
+      startGenericStep('unittest');
+      return;
+    }
     const up = getUP(currentUnit.id);
     const result = up.stepResults[stepIndex];
     reviewMode = isDoneBefore && stepPassed(result); // đã đạt -> chỉ xem lại; chưa đạt -> tính điểm lại
@@ -928,6 +963,12 @@
   // ================= STEP COMPLETION =================
   function completeStep(correct, total) {
     const up = getUP(currentUnit.id);
+    if (currentStepIndex === 8) {
+      up.examResult = { correct: correct, total: total };
+      saveProgress();
+      showExamResult(correct, total);
+      return;
+    }
     if (!reviewMode) {
       up.stepResults[currentStepIndex] = { correct: correct, total: total };
       if (currentStepIndex === up.unlockedStep) up.unlockedStep = currentStepIndex + 1;
@@ -940,6 +981,18 @@
       document.getElementById('step-done-sub').textContent = reviewMode ? 'Bạn có thể quay lại danh sách bước.' : (total > 0 ? ('Đúng ' + correct + '/' + total + ' câu.') : '');
       showScreen('step-done');
     }
+  }
+ 
+  function showExamResult(correct, total) {
+    const pct = Math.round((correct / total) * 100);
+    document.getElementById('exam-result-pct').textContent = pct + '%';
+    document.getElementById('exam-result-detail').textContent = 'Đúng ' + correct + '/' + total + ' câu';
+    const circle = document.getElementById('exam-score-circle');
+    circle.classList.remove('pass', 'fail');
+    circle.classList.add(pct >= 80 ? 'pass' : 'fail');
+    document.getElementById('exam-result-emoji').textContent = pct >= 80 ? '🏆' : '📖';
+    document.getElementById('exam-result-title').textContent = pct >= 80 ? 'Xuất sắc!' : 'Cố gắng thêm nhé!';
+    showScreen('exam-result');
   }
   document.getElementById('step-done-continue').addEventListener('click', () => { renderUnitDetail(); showScreen('unit-detail'); });
  
@@ -981,6 +1034,13 @@
     if (nextUnit) { currentUnit = nextUnit; renderUnitDetail(); showScreen('unit-detail'); }
   });
   document.getElementById('result-map').addEventListener('click', () => { renderMap(); showScreen('map'); });
+ 
+  document.getElementById('exam-retry').addEventListener('click', () => {
+    enterStep(8, false);
+  });
+  document.getElementById('exam-back').addEventListener('click', () => {
+    renderUnitDetail(); showScreen('unit-detail');
+  });
  
   // ================= STEP 1: PHONICS INTRO =================
   function startPhonicsIntro() {
@@ -1040,10 +1100,11 @@
     'odd': '5. Odd One Out',
     'reading': '6. Reading Stories',
     'sentence': '7. Sentence Builder',
-    'fillsentence': '8. Fill Sentence'
+    'fillsentence': '8. Fill Sentence',
+    'unittest': '9. Bài kiểm tra Unit'
   };
-  // map generic key to the actual step index (0..7) for progress recording
-  const KEY_TO_STEPINDEX = { 'phonics-check': 0, 'vocab-quiz': 1, 'remove': 2, 'fill': 3, 'odd': 4, 'reading': 5, 'sentence': 6, 'fillsentence': 7 };
+  // map generic key to the actual step index (0..8) for progress recording
+  const KEY_TO_STEPINDEX = { 'phonics-check': 0, 'vocab-quiz': 1, 'remove': 2, 'fill': 3, 'odd': 4, 'reading': 5, 'sentence': 6, 'fillsentence': 7, 'unittest': 8 };
  
   function startGenericStep(key) {
     currentStepIndex = KEY_TO_STEPINDEX[key];
@@ -1083,6 +1144,18 @@
     }
     if (key === 'fillsentence') {
       return u.fillSentences.map(fs => ({ type: 'mcq', sentence: fs.before + ' ____ ' + fs.after, question: 'Chọn từ đúng điền vào chỗ trống', options: shuffle(fs.options), correct: fs.answer }));
+    }
+    if (key === 'unittest') {
+      let all = [];
+      all = all.concat(buildQueue('phonics-check'));
+      all = all.concat(buildQueue('vocab-quiz'));
+      all = all.concat(buildQueue('remove'));
+      all = all.concat(buildQueue('fill'));
+      all = all.concat(buildQueue('odd'));
+      all = all.concat(buildQueue('reading'));
+      all = all.concat(buildQueue('sentence'));
+      all = all.concat(buildQueue('fillsentence'));
+      return shuffle(all);
     }
     return [];
   }
@@ -1381,4 +1454,3 @@
 </body>
 </html>
  
-
